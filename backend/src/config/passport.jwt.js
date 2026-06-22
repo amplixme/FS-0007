@@ -8,7 +8,7 @@ const strategyConfig = {
 }
 
 const verifyToken = async (jwt_payload, done) => {
-    if (!jwt_payload) return done(null, false, { messages: "Invalid Token" })
+    if (!jwt_payload) return done(null, false, { message: "Invalid Token" })
     return done(null, jwt_payload)
 }
 

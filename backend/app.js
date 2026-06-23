@@ -9,7 +9,7 @@ const PORT = process.env.PORT || 3000
 app.use(cors())
 app.use(express.json())
 app.use(passport.initialize())
-app.use("api/",router)
+app.use("/api",router)
 
 app.listen(PORT, () => {
   console.log(`Server corriendo en puerto ${PORT}`);

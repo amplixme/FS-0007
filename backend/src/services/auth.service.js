@@ -4,48 +4,49 @@ import prisma from "../repository/Prisma/prisma.db.js";
 import CustomError from "../utils/customError.js";
 
 export const register = async (email, password, name) => {
-    const existUser = await prisma.user.findUnique({
-        where: {
-            email,
-        },
-    });
+  const existUser = await prisma.user.findUnique({
+    where: {
+      email,
+    },
+  });
 
-    if (existUser) throw new CustomError(409,"User already exists.")
+  if (existUser) throw new CustomError(409, "User already exists.");
 
-    const hashedPassword = await bcrypt.hash(password, 10);
-	
-    const newUser = await prisma.user.create({
-        data: {
-            email,
-            password: hashedPassword,
-            name,
-        },
-    });
+  const hashedPassword = await bcrypt.hash(password, 10);
 
-    return newUser;
-}
+  const newUser = await prisma.user.create({
+    data: {
+      email,
+      password: hashedPassword,
+      name,
+      role: "USER",
+    },
+  });
+
+  return newUser;
+};
 
 export const login = async (email, password) => {
-	const user = await prisma.user.findUnique({
-		where: {
-			email,
-		},
-	});
+  const user = await prisma.user.findUnique({
+    where: {
+      email,
+    },
+  });
 
-	if (!user) throw new CustomError(401,'Invalid credentials')
+  if (!user) throw new CustomError(401, "Invalid credentials");
 
-	const passwordMatch = await bcrypt.compare(password, user.password);
+  const passwordMatch = await bcrypt.compare(password, user.password);
 
-	if (!passwordMatch) throw new CustomError(401,'Invalid credentials')
+  if (!passwordMatch) throw new CustomError(401, "Invalid credentials");
 
-	const token = generateToken(user);
+  const token = generateToken(user);
 
-	return {
-		token,
-		user: {
-			id: user.id,
-			email: user.email,
-			name: user.name,
-		},
-	};
+  return {
+    token,
+    user: {
+      id: user.id,
+      email: user.email,
+      name: user.name,
+    },
+  };
 };

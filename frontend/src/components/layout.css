@@ -1,0 +1,140 @@
+.app-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.site-header {
+  width: 100%;
+  border-bottom: 1px solid #e5e7eb;
+  background-color: #ffffff;
+}
+
+.header-container {
+  width: min(1120px, 100%);
+  min-height: 72px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.logo {
+  color: #111827;
+  font-size: 1.25rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.navigation {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.navigation a {
+  color: #374151;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.navigation a:hover,
+.navigation a.active {
+  color: #111827;
+}
+
+.register-link {
+  border-radius: 6px;
+  padding: 10px 16px;
+  background-color: #111827;
+  color: #ffffff !important;
+}
+
+.register-link:hover,
+.register-link.active {
+  background-color: #374151;
+  color: #ffffff !important;
+}
+
+.menu-button {
+  display: none;
+  width: 42px;
+  height: 42px;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.menu-button span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  margin: 5px auto;
+  background-color: #111827;
+}
+
+.main-content {
+  flex: 1;
+  width: min(1120px, 100%);
+  margin: 0 auto;
+  padding: 32px 24px;
+}
+
+.site-footer {
+  padding: 20px 24px;
+  border-top: 1px solid #e5e7eb;
+  color: #6b7280;
+  text-align: center;
+  font-size: 0.875rem;
+}
+
+.site-footer p {
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .header-container {
+    position: relative;
+    min-height: 64px;
+    padding: 0 18px;
+  }
+
+  .menu-button {
+    display: block;
+  }
+
+  .navigation {
+    display: none;
+    position: absolute;
+    top: 64px;
+    right: 18px;
+    left: 18px;
+    padding: 16px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    background-color: #ffffff;
+    box-shadow: 0 10px 24px rgb(0 0 0 / 10%);
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+  }
+
+  .navigation-open {
+    display: flex;
+  }
+
+  .navigation a {
+    padding: 8px 4px;
+  }
+
+  .register-link {
+    text-align: center;
+  }
+
+  .main-content {
+    padding: 24px 18px;
+  }
+}
+

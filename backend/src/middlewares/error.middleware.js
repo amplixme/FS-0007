@@ -1,4 +1,4 @@
-import { Prisma } from "@prisma/client";
+import { Prisma } from "../repository/Prisma/generated/client.ts";
 import { error } from "../utils/response.js";
 
 export const errorHandler = (err, req, res, next) => {

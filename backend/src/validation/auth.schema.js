@@ -1,28 +1,23 @@
-import Joi from "joi";
+import { z } from "zod";
 
-export const registerSchema = Joi.object({
-    email: Joi.string().email().required().messages({
-        "string.email": "El email debe ser válido",
-        "any.required": "El email es requerido",
-    }),
-    password: Joi.string().min(8).required().messages({
-        "string.min": "La contraseña debe tener al menos 8 caracteres",
-        "any.required": "La contraseña es requerida",
-    }),
-    name: Joi.string().min(2).required().messages({
-        "string.min": "El nombre debe tener al menos 2 caracteres",
-        "any.required": "El nombre es requerido",
-    }),
+export const registerSchema = z.object({
+  email: z
+    .email("El email debe ser válido"),
+
+  password: z
+    .string()
+    .min(8, "La contraseña debe tener al menos 8 caracteres"),
+
+  name: z
+    .string()
+    .min(2, "El nombre debe tener al menos 2 caracteres"),
 });
 
-export const loginSchema = Joi.object({
-    email: Joi.string().email().required().messages({
-        "string.email": "El email debe ser válido",
-        "any.required": "El email es requerido",
-    }),
-    password: Joi.string().min(8).required().messages({
-        "string.min": "La contraseña debe tener al menos 8 caracteres",
-        "any.required": "La contraseña es requerida",
-    })
-});
+export const loginSchema = z.object({
+  email: z
+    .email("El email debe ser válido"),
 
+  password: z
+    .string()
+    .min(8, "La contraseña debe tener al menos 8 caracteres"),
+});

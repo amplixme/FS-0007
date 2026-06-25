@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import apiClient from "../services/api";
 
 export default function FormLogin() {
     const navigate = useNavigate();
+    const [showPassword, setShowPassword] = useState(false);
 
     const [form, setForm] = useState({
         email: "",
@@ -33,7 +35,7 @@ export default function FormLogin() {
     };
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
+        e.preventDefault(); console.log("handleSubmit ejecutado");
         setServerError("");
 
         const validationErrors = validate();
@@ -44,18 +46,17 @@ export default function FormLogin() {
 
         setLoading(true);
         try {
-            // eslint-disable-next-line no-undef
-            const { data } = await apiClient.post("/api/auth/login", {
+            const { data } = await apiClient.post("/auth/login", {
                 email: form.email,
                 password: form.password,
             });
             localStorage.setItem("token", data.token);
             localStorage.setItem("user", JSON.stringify(data.user));
 
-            navigate("/dashboard", { state: { successMessage: "¡Bienvenido de nuevo!" } });
+            navigate("/");
 
         } catch (err) {
-            const msg = err?.response?.data?.message || "Ocurrió un error. Intentá de nuevo.";
+            const msg = err?.response?.data?.error?.message || "Ocurrió un error. Intentá de nuevo.";
             setServerError(msg);
         } finally {
             setLoading(false);
@@ -82,7 +83,7 @@ export default function FormLogin() {
                         value={form.email}
                         onChange={handleChange}
                     />
-                    {errors.email && <span className="text-sm font-small ml-1 text-error">{errors.email}</span>}
+                    {errors.email && <span className="text-sm font-small text-slate-700 ml-1 text-error">{errors.email}</span>}
                 </div>
             </div>
 
@@ -91,7 +92,7 @@ export default function FormLogin() {
                     <label className="block text-sm font-semibold text-on-surface" htmlFor="password">
                         Contraseña
                     </label>
-                    <a className="text-sm font-semibold text-primary hover:text-on-primary-fixed-variant transition-colors" href="#">
+                    <a className="text-sm font-semibold text-primary hover:text-on-primary-fixed-variant transition-colors" href="/forgot-password">
                         ¿Olvidaste tu contraseña?
                     </a>
                 </div>
@@ -101,7 +102,7 @@ export default function FormLogin() {
                         <span className="material-symbols-outlined text-[20px]">lock</span>
                     </div>
                     <input
-                        type="password"
+                        type={showPassword ? "text" : "password"}
                         className="block w-full pl-11 pr-12 py-3.5 bg-surface-container-low border-transparent rounded-xl text-on-surface placeholder:text-outline focus:ring-2 focus:ring-primary/20 focus:border-primary/30 focus:bg-surface-container-lowest transition-all"
                         id="password"
                         name="password"
@@ -109,21 +110,22 @@ export default function FormLogin() {
                         value={form.password}
                         onChange={handleChange}
                     />
-                    {errors.password && <span className="text-sm font-small ml-1 text-error">{errors.password}</span>}
                     <button
                         className="absolute inset-y-0 right-0 pr-4 flex items-center text-outline hover:text-on-surface transition-colors"
-                        type="button">
-                        <span className="material-symbols-outlined text-[20px]">visibility</span>
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}>
+                        <span className="material-symbols-outlined text-[20px]">{showPassword ? "visibility_off" : "visibility"}</span>
                     </button>
                 </div>
+                {errors.password && <span className="text-sm font-small text-slate-700 ml-1 text-error">{errors.password}</span>}
 
             </div>
-            {serverError && <p className="text-sm font-small ml-1 text-error">{serverError}</p>}
+            {serverError && <p className="text-sm font-small text-slate-700 ml-1 text-error">{serverError}</p>}
 
             <button className="w-full bg-primary text-on-primary font-bold py-4 px-6 rounded-full hover:bg-on-primary-fixed-variant active:scale-[0.98] transition-all ambient-shadow text-base"
                 type="submit" disabled={loading}>
-                {loading ? "Procesando..." : "Iniciar sesión"}
+                {loading ? "Procesando..." : "Registrarse"}
             </button>
-        </form>
+        </form >
     );
 }

@@ -10,7 +10,6 @@ function Login() {
   }, []);
   return (
     <main>
-      {successMessage && <p className="text-green-500">{successMessage}</p>}
       <div className="bg-surface-container-lowest w-full min-h-screen md:min-h-fit md:rounded-[16px] ambient-shadow overflow-hidden transition-all duration-300">
 
         <div className="h-1.5 w-full bg-gradient-to-r from-primary to-secondary-container"></div>
@@ -22,9 +21,11 @@ function Login() {
             <h1 className="text-[28px] font-bold text-on-surface leading-tight tracking-tight mb-2">
               Iniciar sesión
             </h1>
-            <p className="text-on-surface-variant body-lg">
-              Ingresa a tu cuenta para continuar
-            </p>
+            {
+              <p className="text-on-surface-variant body-lg">
+                {successMessage || "Ingresa a tu cuenta para continuar"}
+              </p>
+            }
           </header>
           <FormLogin />
           <div className="my-8 flex items-center gap-4 no-line-separator">

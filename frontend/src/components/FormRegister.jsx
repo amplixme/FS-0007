@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import apiClient from "../services/api";
+
 
 export default function FormRegister() {
     const navigate = useNavigate();
@@ -55,8 +57,8 @@ export default function FormRegister() {
         setLoading(true);
         try {
             // eslint-disable-next-line no-undef
-            await apiClient.post("/api/auth/register", {
-                username: form.username,
+            await apiClient.post("/auth/register", {
+                name: form.username,
                 email: form.email,
                 password: form.password,
             });
@@ -64,7 +66,7 @@ export default function FormRegister() {
             navigate("/login", { state: { successMessage: "Cuenta creada. ¡Ya podés iniciar sesión!" } });
 
         } catch (err) {
-            const msg = err?.response?.data?.message || "Ocurrió un error. Intentá de nuevo.";
+            const msg = err?.response?.data?.error?.message || "Ocurrió un error. Intentá de nuevo.";
             setServerError(msg);
         } finally {
             setLoading(false);

@@ -1,5 +1,10 @@
+import { useEffect } from "react";
 import FormRegister from "../components/FormRegister";
+
 function Register() {
+  useEffect(() => {
+    document.title = "TuProyecto - Registro";
+  }, []);
   return (
     <main className="w-full max-w-[420px] bg-white md:rounded-[16px] shadow-xl md:shadow-slate-200/50 overflow-hidden flex flex-col">
       <div className="px-8 pt-10 pb-6 text-center">

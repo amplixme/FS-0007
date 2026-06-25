@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import apiClient from "../services/api";
+
 
 export default function FormRegister() {
     const navigate = useNavigate();
@@ -55,8 +57,8 @@ export default function FormRegister() {
         setLoading(true);
         try {
             // eslint-disable-next-line no-undef
-            await apiClient.post("/api/auth/register", {
-                username: form.username,
+            await apiClient.post("/auth/register", {
+                name: form.username,
                 email: form.email,
                 password: form.password,
             });
@@ -64,7 +66,7 @@ export default function FormRegister() {
             navigate("/login", { state: { successMessage: "Cuenta creada. ¡Ya podés iniciar sesión!" } });
 
         } catch (err) {
-            const msg = err?.response?.data?.message || "Ocurrió un error. Intentá de nuevo.";
+            const msg = err?.response?.data?.error?.message || "Ocurrió un error. Intentá de nuevo.";
             setServerError(msg);
         } finally {
             setLoading(false);
@@ -83,11 +85,12 @@ export default function FormRegister() {
                         className="w-full pl-10 pr-4 py-3 bg-slate-50 border-0 rounded-xl focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all outline-none text-slate-900 placeholder:text-slate-400"
                         id="username"
                         name="username"
+                        placeholder="Ej. Juan Pérez"
                         value={form.username}
                         onChange={handleChange}
                     />
                 </div>
-                {errors.username && <span className="text-sm font-small text-slate-700 ml-1 text-error">{errors.username}</span>}
+                {errors.username && <span className="text-sm font-small ml-1 text-error">{errors.username}</span>}
             </div>
 
             <div className="space-y-1.5">
@@ -100,10 +103,11 @@ export default function FormRegister() {
                         className="w-full pl-10 pr-4 py-3 bg-slate-50 border-0 rounded-xl focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all outline-none text-slate-900 placeholder:text-slate-400"
                         id="email"
                         name="email"
+                        placeholder="nombre@ejemplo.com"
                         value={form.email}
                         onChange={handleChange}
                     />
-                    {errors.email && <span className="text-sm font-small text-slate-700 ml-1 text-error">{errors.email}</span>}
+                    {errors.email && <span className="text-sm font-small ml-1 text-error">{errors.email}</span>}
                 </div>
             </div>
 
@@ -117,10 +121,11 @@ export default function FormRegister() {
                         type="password"
                         id="password"
                         name="password"
+                        placeholder="••••••••"
                         value={form.password}
                         onChange={handleChange}
                     />
-                    {errors.password && <span className="text-sm font-small text-slate-700 ml-1 text-error">{errors.password} </span>}
+                    {errors.password && <span className="text-sm font-small ml-1 text-error">{errors.password} </span>}
                 </div>
                 <div className="mt-2 flex items-center gap-2 px-1">
                     <div className="flex-1 h-1 rounded-full bg-primary"></div>
@@ -140,13 +145,14 @@ export default function FormRegister() {
                         type="password"
                         id="confirm_password"
                         name="confirm_password"
+                        placeholder="••••••••"
                         value={form.confirm_password}
                         onChange={handleChange}
                     />
-                    {errors.confirm_password && <span className="text-sm font-small text-slate-700 ml-1 text-error">{errors.confirm_password} </span>}
+                    {errors.confirm_password && <span className="text-sm font-small  ml-1 text-error">{errors.confirm_password} </span>}
                 </div>
 
-                {serverError && <p className="error server-error">{serverError}</p>}
+                {serverError && <p className="text-sm font-small  ml-1 text-error">{serverError}</p>}
             </div>
 
             <label className="flex items-start gap-3 mt-1 cursor-pointer group">

@@ -23,7 +23,13 @@ export const register = async (email, password, name) => {
     },
   });
 
-  return newUser;
+  return {
+    user: {
+      id: newUser.id,
+      email: newUser.email,
+      name: newUser.name,
+    },
+  };
 };
 
 export const login = async (email, password) => {

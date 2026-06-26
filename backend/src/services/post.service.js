@@ -6,12 +6,12 @@ export const create = async (title, content, authorId) => {
     data: {
       title,
       content,
-      authorId: Number(authorId), 
+      authorId: Number(authorId),
     },
     include: {
       author: {
         select: {
-          name: true, 
+          name: true,
         },
       },
     },
@@ -23,23 +23,23 @@ export const create = async (title, content, authorId) => {
 export const getAllPublishedPosts = async () => {
   return await prisma.post.findMany({
     where: {
-      published: true, 
+      published: true,
     },
     include: {
       author: {
         select: {
-          name: true, 
+          name: true,
         },
       },
     },
     orderBy: {
-      createdAt: "desc", 
+      createdAt: "desc",
     },
   });
 };
 
 export const getPostById = async (id) => {
- 
+
   const postId = parseInt(id, 10);
   if (isNaN(postId)) throw new CustomError(400, "ID inválido");
 

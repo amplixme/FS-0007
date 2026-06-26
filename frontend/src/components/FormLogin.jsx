@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import apiClient from "../services/api";
+import { useAuth } from "../context/AuthContext";
 
 export default function FormLogin() {
     const navigate = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
+    const { login } = useAuth();
 
     const [form, setForm] = useState({
         email: "",
@@ -50,12 +52,12 @@ export default function FormLogin() {
                 email: form.email,
                 password: form.password,
             });
-            localStorage.setItem("token", data.token);
-            localStorage.setItem("user", JSON.stringify(data.user));
+            login(data.data.token, data.data.user);
 
             navigate("/");
 
         } catch (err) {
+            console.error("Error en la solicitud de inicio de sesión:", err);
             const msg = err?.response?.data?.error?.message || "Ocurrió un error. Intentá de nuevo.";
             setServerError(msg);
         } finally {
@@ -124,7 +126,7 @@ export default function FormLogin() {
 
             <button className="w-full bg-primary text-on-primary font-bold py-4 px-6 rounded-full hover:bg-on-primary-fixed-variant active:scale-[0.98] transition-all ambient-shadow text-base"
                 type="submit" disabled={loading}>
-                {loading ? "Procesando..." : "Registrarse"}
+                {loading ? "Procesando..." : "Iniciar sesión"}
             </button>
         </form >
     );

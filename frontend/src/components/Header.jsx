@@ -1,8 +1,10 @@
 import { Link, NavLink } from "react-router-dom";
 import { useState } from "react";
+import { useAuth } from "../context/AuthContext";
 
 function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { user, logout, isAuthenticated } = useAuth();
 
   const closeMenu = () => {
     setIsMenuOpen(false);
@@ -28,17 +30,29 @@ function Header() {
         </button>
 
         <nav className={`navigation ${isMenuOpen ? "navigation-open" : ""}`}>
-          <NavLink to="/" onClick={closeMenu}>
-            Inicio
-          </NavLink>
+          {isAuthenticated ? (
+            <>
+              <span>{user.name}</span>
 
-          <NavLink to="/login" onClick={closeMenu}>
-            Iniciar sesión
-          </NavLink>
+              <button onClick={logout}>
+                Logout
+              </button>
+            </>
+          ) : (
+            <>
+              <NavLink to="/" onClick={closeMenu}>
+                Inicio
+              </NavLink>
 
-          <NavLink to="/register" className="register-link" onClick={closeMenu}>
-            Registrarse
-          </NavLink>
+              <NavLink to="/login" onClick={closeMenu}>
+                Iniciar sesión
+              </NavLink>
+
+              <NavLink to="/register" className="register-link" onClick={closeMenu}>
+                Registrarse
+              </NavLink>
+            </>
+          )}
         </nav>
       </div>
     </header>

@@ -1,4 +1,4 @@
-import { create } from "../services/post.service.js";
+import { create, getAllPublishedPosts, getPostById } from "../services/post.service.js";
 import { success } from "../utils/response.js";
 
 export const createPost = async (req, res, next) => {
@@ -9,6 +9,25 @@ export const createPost = async (req, res, next) => {
     const result = await create(title, content, authorId);
     
     success(res, result, 201); 
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const getPostsController = async (req, res, next) => {
+  try {
+    const posts = await getAllPublishedPosts();
+    success(res, posts, 200);
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const getPostByIdController = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const post = await getPostById(id);
+    success(res, post, 200);
   } catch (err) {
     next(err);
   }

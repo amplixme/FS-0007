@@ -6,6 +6,7 @@ import Register from "./pages/Register";
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import CreatePost from "./pages/CreatePost";
+import PostDetail from "./pages/PostDetail";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/crear" element={<ProtectedRoute><CreatePost /></ProtectedRoute>} />
+            <Route path="/posts/:id" element={<PostDetail />} />
           </Routes>
         </Layout>
       </AuthProvider>

@@ -7,8 +7,8 @@ export const createPost = async (req, res, next) => {
     const authorId = req.user.userId;
 
     const result = await create(title, content, authorId);
-    
-    success(res, result, 201); 
+
+    success(res, result, 201);
   } catch (err) {
     next(err);
   }

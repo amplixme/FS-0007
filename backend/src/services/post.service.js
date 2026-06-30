@@ -1,12 +1,13 @@
 import prisma from "../repository/Prisma/prisma.db.js";
 import CustomError from "../utils/customError.js";
 
-export const create = async (title, content, authorId) => {
+export const create = async (title, content, authorId, published) => {
   const newPost = await prisma.post.create({
     data: {
       title,
       content,
       authorId: Number(authorId),
+      published: Boolean(published),
     },
     include: {
       author: {

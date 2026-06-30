@@ -40,7 +40,6 @@ export const getAllPublishedPosts = async () => {
 };
 
 export const getPostById = async (id) => {
-
   const postId = parseInt(id, 10);
   if (isNaN(postId)) throw new CustomError(400, "ID inválido");
 
@@ -60,4 +59,56 @@ export const getPostById = async (id) => {
   }
 
   return post;
+};
+
+const validateOwnership = async (id, user) => {
+  const postId = parseInt(id, 10);
+
+  if (isNaN(postId)) throw new CustomError(400, "ID inválido");
+
+  const post = await prisma.post.findUnique({
+    where: { id: postId },
+  });
+
+  if (!post) {
+    throw new CustomError(404, "Post no encontrado");
+  }
+
+  const isAuthor = post.authorId === Number(user.userId);
+  const isAdmin = user.role === "ADMIN";
+
+  if (!isAuthor && !isAdmin) {
+    throw new CustomError(403, "No tienes permiso para modificar este post");
+  }
+
+  return postId;
+};
+
+export const updatePost = async (id, title, content, user) => {
+  const postId = await validateOwnership(id, user);
+
+  return await prisma.post.update({
+    where: { id: postId },
+    data: {
+      title,
+      content,
+    },
+    include: {
+      author: {
+        select: {
+          name: true,
+        },
+      },
+    },
+  });
+};
+
+export const deletePost = async (id, user) => {
+  const postId = await validateOwnership(id, user);
+
+  return await prisma.post.delete({
+    where: {
+      id: postId,
+    },
+  });
 };

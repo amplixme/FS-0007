@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react'
 import PostCard from '../components/PostCard'
 import { getPosts } from '../services/post.service'
+import Spinner from "../components/common/Spinner";
+import ErrorMessage from "../components/common/ErrorMessage";
+import EmptyState from "../components/common/EmptyState";
 
 export default function Home() {
   const [posts, setPosts] = useState([])
@@ -14,9 +17,18 @@ export default function Home() {
       .finally(() => setLoading(false))
   }, [])
 
-  if (loading) return <p>Cargando...</p>
-  if (error) return <p>{error}</p>
-  if (!posts.length) return <p>No hay publicaciones todavía</p>
+  if (loading) return <Spinner />
+  if (error) return (
+    <ErrorMessage
+      message={error}
+      onRetry={loadPosts}
+    />
+  );
+  if (!posts.length) return (
+    <EmptyState
+      message="Todavía no existen publicaciones."
+    />
+  );
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">

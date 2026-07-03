@@ -6,12 +6,8 @@ import Register from "./pages/Register";
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import CreatePost from "./pages/CreatePost";
-<<<<<<< HEAD
-import PostDetail from "./pages/PostDetail";
-=======
 import EditPost from "./pages/EditPost";
-
->>>>>>> 9856895f05ae331bab8f27094acdcfd0d9611751
+import PostDetail from "./pages/PostDetail"
 
 function App() {
   return (
@@ -22,11 +18,9 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-<<<<<<< HEAD
-            <Route path="/crear" element={<ProtectedRoute><CreatePost /></ProtectedRoute>} />
             <Route path="/posts/:id" element={<PostDetail />} />
-=======
             <Route
+            
               path="/crear"
               element={
                 <ProtectedRoute>
@@ -42,7 +36,6 @@ function App() {
                 </ProtectedRoute>
               }
             />
->>>>>>> 9856895f05ae331bab8f27094acdcfd0d9611751
           </Routes>
         </Layout>
       </AuthProvider>

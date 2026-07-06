@@ -22,15 +22,26 @@ export const create = async (title, content, authorId, published, coverImage) =>
   return newPost;
 };
 
-export const getAllPublishedPosts = async () => {
+export const getAllPublishedPosts = async (category) => {
+  const where = {
+    published: true,
+  };
+
+  if (category) {
+    where.categories = {
+      some: {
+        slug: category,
+      },
+    };
+  }
+
   return await prisma.post.findMany({
-    where: {
-      published: true,
-    },
+    where,
     include: {
       author: {
         select: {
           name: true,
+          categories: true,
         },
       },
     },

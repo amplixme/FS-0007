@@ -28,6 +28,7 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            <Route path="/posts/:id" element={<PostDetail />} />
             <Route
               path="/posts/:id/editar"
               element={

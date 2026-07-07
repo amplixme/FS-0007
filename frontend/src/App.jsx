@@ -19,6 +19,24 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/crear" element={<ProtectedRoute><CreatePost /></ProtectedRoute>} />
             <Route path="/posts/:id" element={<PostDetail />} />
+            <Route
+
+              path="/crear"
+              element={
+                <ProtectedRoute>
+                  <CreatePost />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="/posts/:id" element={<PostDetail />} />
+            <Route
+              path="/posts/:id/editar"
+              element={
+                <ProtectedRoute>
+                  <EditPost />
+                </ProtectedRoute>
+              }
+            />
           </Routes>
         </Layout>
       </AuthProvider>

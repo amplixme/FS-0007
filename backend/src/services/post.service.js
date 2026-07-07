@@ -41,9 +41,9 @@ export const getAllPublishedPosts = async (category) => {
       author: {
         select: {
           name: true,
-          categories: true,
         },
       },
+      categories: true,
     },
     orderBy: {
       createdAt: "desc",

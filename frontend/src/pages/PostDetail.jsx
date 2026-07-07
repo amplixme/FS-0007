@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { getPostById } from "../services/post.service";
-
+import { getPostById, deletePost } from "../services/post.service";
+import ConfirmModal from "../components/common/ConfirmModal";
 function PostDetail() {
   const { id } = useParams();
   const { user } = useAuth();
@@ -10,6 +10,13 @@ function PostDetail() {
   const [post, setPost] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
+
+  const navigate = useNavigate();
+
+  const [toast, setToast] = useState({ show: false, message: "", type: "success" });
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -26,8 +33,27 @@ function PostDetail() {
       }
     };
 
+
     fetchPost();
   }, [id]);
+
+   const handleDeleteConfirm = async () => {
+    try {
+      setIsModalOpen(false); 
+      await deletePost(id); 
+      
+      setToast({ show: true, message: "¡Publicación eliminada con éxito!", type: "success" }); 
+      setTimeout(() => {
+        navigate("/"); 
+      }, 1000);
+    } catch (err) {
+      setToast({ 
+        show: true, 
+        message: err.message || "Hubo un error al intentar eliminar el post", 
+        type: "error" 
+      });
+    }
+  };
 
   if (isLoading) {
     return <p className="text-center text-slate-500">Cargando post...</p>;
@@ -56,6 +82,15 @@ function PostDetail() {
 
   return (
     <article className="max-w-3xl mx-auto rounded-xl bg-white p-6 shadow-sm md:p-8">
+      {}
+      {toast.show && (
+        <div className={`fixed top-1/2 left-1/2 z-50 -translate-x-1/2 -translate-y-1/2 fle items-center gap-2 rounded-lg px-4 py-3 text-white shadow-xl transition-all duration-300 ${
+          toast.type === "success" ? "bg-emerald-600" : "bg-red-600"
+        }`}>
+          <span className="text-base">{toast.type === "success" ? "✅" : "❌"}</span>
+          <p className="text-sm font-medium">{toast.message}</p>
+        </div>
+      )}
       <Link
         to="/"
         className="inline-block mb-6 text-blue-600 hover:underline"
@@ -93,12 +128,21 @@ function PostDetail() {
 
           <button
             type="button"
+            onClick={() => setIsModalOpen(true)} 
             className="rounded-md bg-red-600 px-4 py-2 font-medium text-white hover:bg-red-700"
           >
             Eliminar
           </button>
         </div>
       )}
+      {}
+      <ConfirmModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onConfirm={handleDeleteConfirm}
+        title="¿Estás seguro de que deseas eliminar este artículo?"
+        message="Esta acción no se puede deshacer y eliminará el post permanentemente."
+      />
     </article>
   );
 }

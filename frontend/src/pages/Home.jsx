@@ -21,7 +21,7 @@ export default function Home() {
   if (error) return (
     <ErrorMessage
       message={error}
-      onRetry={loadPosts}
+    //onRetry={loadPosts}
     />
   );
   if (!posts.length) return (

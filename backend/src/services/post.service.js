@@ -41,7 +41,12 @@ export const getAllPublishedPosts = async (category) => {
       author: {
         select: {
           name: true,
-          categories: true,
+        },
+      },
+      categories: {
+        select: {
+          name: true,
+          slug: true,
         },
       },
     },

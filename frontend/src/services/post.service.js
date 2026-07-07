@@ -1,8 +1,10 @@
 import api from "./api";
 
-export const getPosts = async () => {
+export const getPosts = async (category) => {
   try {
-    const response = await api.get("/posts");
+    const response = await api.get("/posts", {
+      params: category ? { category } : {},
+    });
     return response.data;
   } catch (error) {
     throw new Error(

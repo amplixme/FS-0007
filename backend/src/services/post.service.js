@@ -43,7 +43,12 @@ export const getAllPublishedPosts = async (category) => {
           name: true,
         },
       },
-      categories: true,
+      categories: {
+        select: {
+          name: true,
+          slug: true,
+        },
+      },
     },
     orderBy: {
       createdAt: "desc",

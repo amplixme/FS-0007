@@ -113,6 +113,14 @@ function PostDetail() {
         </div>
       </header>
 
+      {post.coverImage && (
+        <img
+         src={post.coverImage}
+         alt={`Portada de ${post.title}`}
+          className="mb-8 w-full rounded-xl object-cover"
+        />
+      )}
+
       <div className="whitespace-pre-wrap leading-7 text-slate-700">
         {post.content}
       </div>

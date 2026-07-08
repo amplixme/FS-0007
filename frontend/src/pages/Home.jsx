@@ -18,6 +18,7 @@ export default function Home() {
   const loadPosts = useCallback(() => {
     setLoading(true);
     setError(null);
+
     getPosts(activeSlug)
       .then((data) => setPosts(data.data))
       .catch(() => setError("Error al cargar las publicaciones"))
@@ -33,8 +34,8 @@ export default function Home() {
   };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-[260px_1fr] gap-6 p-4 md:p-8">
-      <aside className="md:sticky md:top-8 md:self-start bg-white rounded-2xl md:shadow-sm md:py-4">
+    <div className="grid grid-cols-1 gap-6 p-4 md:grid-cols-[260px_1fr] md:p-8">
+      <aside className="rounded-2xl bg-white md:sticky md:top-8 md:self-start md:py-4 md:shadow-sm">
         <CategoryFilter activeSlug={activeSlug} onChange={handleCategoryChange} />
       </aside>
 
@@ -50,7 +51,7 @@ export default function Home() {
         )}
 
         {!loading && !error && posts.length > 0 && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
             {posts.map((post) => (
               <PostCard key={post.id} post={post} />
             ))}

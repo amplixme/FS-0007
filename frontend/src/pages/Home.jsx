@@ -1,40 +1,62 @@
-import { useEffect, useState } from 'react'
-import PostCard from '../components/PostCard'
-import { getPosts } from '../services/post.service'
+import { useCallback, useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
+import PostCard from "../components/PostCard";
+import CategoryFilter from "../components/CategoryFilter";
+import { getPosts } from "../services/post.service";
 import Spinner from "../components/common/Spinner";
 import ErrorMessage from "../components/common/ErrorMessage";
 import EmptyState from "../components/common/EmptyState";
 
 export default function Home() {
-  const [posts, setPosts] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
+  const [searchParams, setSearchParams] = useSearchParams();
+  const activeSlug = searchParams.get("category");
+
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const loadPosts = useCallback(() => {
+    setLoading(true);
+    setError(null);
+    getPosts(activeSlug)
+      .then((data) => setPosts(data.data))
+      .catch(() => setError("Error al cargar las publicaciones"))
+      .finally(() => setLoading(false));
+  }, [activeSlug]);
 
   useEffect(() => {
-    getPosts()
-      .then(res => setPosts(res.data))
-      .catch(() => setError('Error al cargar las publicaciones'))
-      .finally(() => setLoading(false))
-  }, [])
+    loadPosts();
+  }, [loadPosts]);
 
-  if (loading) return <Spinner />
-  if (error) return (
-    <ErrorMessage
-      message={error}
-    //onRetry={loadPosts}
-    />
-  );
-  if (!posts.length) return (
-    <EmptyState
-      message="Todavía no existen publicaciones."
-    />
-  );
+  const handleCategoryChange = (slug) => {
+    setSearchParams(slug ? { category: slug } : {});
+  };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
-      {posts.map(post => (
-        <PostCard key={post.id} post={post} />
-      ))}
+    <div className="grid grid-cols-1 md:grid-cols-[260px_1fr] gap-6 p-4 md:p-8">
+      <aside className="md:sticky md:top-8 md:self-start bg-white rounded-2xl md:shadow-sm md:py-4">
+        <CategoryFilter activeSlug={activeSlug} onChange={handleCategoryChange} />
+      </aside>
+
+      <main>
+        {loading && <Spinner />}
+
+        {!loading && error && (
+          <ErrorMessage message={error} onRetry={loadPosts} />
+        )}
+
+        {!loading && !error && !posts.length && (
+          <EmptyState message="Todavía no existen publicaciones." />
+        )}
+
+        {!loading && !error && posts.length > 0 && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {posts.map((post) => (
+              <PostCard key={post.id} post={post} />
+            ))}
+          </div>
+        )}
+      </main>
     </div>
-  )
+  );
 }

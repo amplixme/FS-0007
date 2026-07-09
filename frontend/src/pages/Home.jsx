@@ -53,7 +53,7 @@ export default function Home() {
         {!loading && !error && posts.length > 0 && (
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
             {posts.map((post) => (
-              <PostCard key={post.id} post={post} />
+              <PostCard key={post.id} post={post} onClickCat={handleCategoryChange}/>
             ))}
           </div>
         )}

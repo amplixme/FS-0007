@@ -1,5 +1,8 @@
 import { Router } from "express";
-import { createCommentController } from "../controllers/comment.controllers.js";
+import {
+  createCommentController,
+  getCommentsByPostController,
+} from "../controllers/comment.controllers.js";
 import { authMiddleware } from "../middlewares/auth.middleware.js";
 import { validate } from "../middlewares/validate.middleware.js";
 import { commentSchema } from "../validation/comment.schema.js";
@@ -12,5 +15,7 @@ router.post(
   validate(commentSchema),
   createCommentController,
 );
+
+router.get("/:postId/comments", getCommentsByPostController);
 
 export default router;

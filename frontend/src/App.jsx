@@ -7,7 +7,7 @@ import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import CreatePost from "./pages/CreatePost";
 import PostDetail from "./pages/PostDetail";
-
+import CategoriesAdmin from "./pages/CategoriesAdmin";
 function App() {
   return (
     <BrowserRouter>
@@ -19,6 +19,7 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/crear" element={<ProtectedRoute><CreatePost /></ProtectedRoute>} />
             <Route path="/posts/:id" element={<PostDetail />} />
+            <Route path="/categorias" element={  <ProtectedRoute>  <CategoriesAdmin />  </ProtectedRoute> }/>
           </Routes>
         </Layout>
       </AuthProvider>

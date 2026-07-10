@@ -1,4 +1,3 @@
-// comment.controllers.js
 import { createComment, getCommentsByPost, updateComment, deleteComment } from "../services/comment.service.js";
 import { success } from "../utils/response.js";
 

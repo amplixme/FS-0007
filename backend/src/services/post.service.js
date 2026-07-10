@@ -35,7 +35,7 @@ export const getAllPublishedPosts = async (category) => {
     };
   }
 
-  return await prisma.post.findMany({
+  const posts = await prisma.post.findMany({
     where,
     include: {
       author: {
@@ -49,11 +49,21 @@ export const getAllPublishedPosts = async (category) => {
           slug: true,
         },
       },
+      _count: {
+        select: {
+          comments: true,
+        },
+      },
     },
     orderBy: {
       createdAt: "desc",
     },
   });
+
+  return posts.map(({ _count, ...post }) => ({
+    ...post,
+    commentCount: _count.comments,
+  }));
 };
 
 export const getPostById = async (id) => {

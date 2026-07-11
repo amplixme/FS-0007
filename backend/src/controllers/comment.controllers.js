@@ -1,11 +1,10 @@
-import { createComment, getCommentsByPost } from "../services/comment.service";
-import { success } from "../utils/response";
+import { createComment, getCommentsByPost } from "../services/comment.service.js";
+import { success } from "../utils/response.js";
 
 export const createCommentController = async (req, res, next) => {
   try {
-    const postId = req.params;
-    const content = req.body;
-
+    const { postId } = req.params;
+    const { content } = req.body;
     const authorId = req.user.userId;
 
     const comment = await createComment(postId, content, authorId);
@@ -18,11 +17,11 @@ export const createCommentController = async (req, res, next) => {
 
 export const getCommentsByPostController = async (req, res, next) => {
   try {
-    const postId = req.params;
+    const { postId } = req.params;
 
-    const comments = await getCommentsByPostController(postId);
+    const comments = await getCommentsByPost(postId);
 
-    success(res, comments);
+    success(res, comments, 200);
   } catch (err) {
     next(err);
   }

@@ -22,7 +22,7 @@ export const getCommentsByPostController = async (req, res, next) => {
 
     const comments = await getCommentsByPost(postId);
 
-    success(res, comments);
+    success(res, comments, 200);
   } catch (err) {
     next(err);
   }

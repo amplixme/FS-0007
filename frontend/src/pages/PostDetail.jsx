@@ -1,22 +1,24 @@
 import { useEffect, useState } from "react";
-import { Link, useParams, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { getPostById, deletePost } from "../services/post.service";
 import ConfirmModal from "../components/common/ConfirmModal";
+import CommentSection from "../components/CommentSection";
+
 function PostDetail() {
   const { id } = useParams();
   const { user } = useAuth();
+  const navigate = useNavigate();
 
   const [post, setPost] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
-
-  const navigate = useNavigate();
-
-  const [toast, setToast] = useState({ show: false, message: "", type: "success" });
-
+  const [toast, setToast] = useState({
+    show: false,
+    message: "",
+    type: "success",
+  });
   const [isModalOpen, setIsModalOpen] = useState(false);
-
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -33,24 +35,29 @@ function PostDetail() {
       }
     };
 
-
     fetchPost();
   }, [id]);
 
-   const handleDeleteConfirm = async () => {
+  const handleDeleteConfirm = async () => {
     try {
-      setIsModalOpen(false); 
-      await deletePost(id); 
-      
-      setToast({ show: true, message: "¡Publicación eliminada con éxito!", type: "success" }); 
+      setIsModalOpen(false);
+
+      await deletePost(id);
+
+      setToast({
+        show: true,
+        message: "¡Publicación eliminada con éxito!",
+        type: "success",
+      });
+
       setTimeout(() => {
-        navigate("/"); 
+        navigate("/");
       }, 1000);
     } catch (err) {
-      setToast({ 
-        show: true, 
-        message: err.message || "Hubo un error al intentar eliminar el post", 
-        type: "error" 
+      setToast({
+        show: true,
+        message: err.message || "Hubo un error al intentar eliminar el post",
+        type: "error",
       });
     }
   };
@@ -61,10 +68,10 @@ function PostDetail() {
 
   if (error) {
     return (
-      <section className="max-w-3xl mx-auto">
+      <section className="mx-auto max-w-3xl">
         <Link
           to="/"
-          className="inline-block mb-6 text-blue-600 hover:underline"
+          className="mb-6 inline-block text-blue-600 hover:underline"
         >
           ← Volver a inicio
         </Link>
@@ -81,19 +88,23 @@ function PostDetail() {
   const isAuthor = user?.id === post.authorId;
 
   return (
-    <article className="max-w-3xl mx-auto rounded-xl bg-white p-6 shadow-sm md:p-8">
-      {}
+    <article className="mx-auto max-w-3xl rounded-xl bg-white p-6 shadow-sm md:p-8">
       {toast.show && (
-        <div className={`fixed top-1/2 left-1/2 z-50 -translate-x-1/2 -translate-y-1/2 fle items-center gap-2 rounded-lg px-4 py-3 text-white shadow-xl transition-all duration-300 ${
-          toast.type === "success" ? "bg-emerald-600" : "bg-red-600"
-        }`}>
-          <span className="text-base">{toast.type === "success" ? "✅" : "❌"}</span>
+        <div
+          className={`fixed left-1/2 top-1/2 z-50 flex -translate-x-1/2 -translate-y-1/2 items-center gap-2 rounded-lg px-4 py-3 text-white shadow-xl transition-all duration-300 ${
+            toast.type === "success" ? "bg-emerald-600" : "bg-red-600"
+          }`}
+        >
+          <span className="text-base">
+            {toast.type === "success" ? "✅" : "❌"}
+          </span>
           <p className="text-sm font-medium">{toast.message}</p>
         </div>
       )}
+
       <Link
         to="/"
-        className="inline-block mb-6 text-blue-600 hover:underline"
+        className="mb-6 inline-block text-blue-600 hover:underline"
       >
         ← Volver a inicio
       </Link>
@@ -115,8 +126,8 @@ function PostDetail() {
 
       {post.coverImage && (
         <img
-         src={post.coverImage}
-         alt={`Portada de ${post.title}`}
+          src={post.coverImage}
+          alt={`Portada de ${post.title}`}
           className="mb-8 w-full rounded-xl object-cover"
         />
       )}
@@ -136,14 +147,16 @@ function PostDetail() {
 
           <button
             type="button"
-            onClick={() => setIsModalOpen(true)} 
+            onClick={() => setIsModalOpen(true)}
             className="rounded-md bg-red-600 px-4 py-2 font-medium text-white hover:bg-red-700"
           >
             Eliminar
           </button>
         </div>
       )}
-      {}
+
+      <CommentSection postId={post.id} />
+
       <ConfirmModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}

@@ -1,5 +1,5 @@
-import { createComment, getCommentsByPost } from "../services/comment.service";
-import { success } from "../utils/response";
+import { createComment, getCommentsByPost } from "../services/comment.service.js";
+import { success } from "../utils/response.js";
 
 export const createCommentController = async (req, res, next) => {
   try {

@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
+import { getAll as getAllCategories } from "../services/category.service";
 
 export default function PostForm({
   initialPost,
@@ -12,6 +14,40 @@ export default function PostForm({
   const [content, setContent] = useState(initialPost?.content ?? "");
   const [published, setPublished] = useState(initialPost?.published ?? true);
   const [validationError, setValidationError] = useState("");
+
+
+  const [availableCategories, setAvailableCategories] = useState([]); 
+  const [selectedCategoryIds, setSelectedCategoryIds] = useState(() => {
+
+    if (initialPost?.categories) {
+      return initialPost.categories.map((cat) => cat.id || cat);
+    }
+    return [];
+  });
+ 
+ 
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await getAllCategories();
+        const cleanList = res?.data || res;
+        setAvailableCategories(Array.isArray(cleanList) ? cleanList : []);
+      } catch (err) {
+        console.error("Error al cargar categorías en el formulario", err);
+      }
+    };
+    fetchCategories();
+  }, []);
+
+
+  const handleCategoryChange = (categoryId) => {
+    setSelectedCategoryIds((prevIds) =>
+      prevIds.includes(categoryId)
+        ? prevIds.filter((id) => id !== categoryId) 
+        : [...prevIds, categoryId] 
+    );
+  };
+  
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -27,6 +63,8 @@ export default function PostForm({
       title: title.trim(),
       content: content.trim(),
       published,
+
+      categoryIds: selectedCategoryIds,
     });
   };
 
@@ -50,6 +88,46 @@ export default function PostForm({
           className="w-full min-h-[400px] bg-transparent border-none p-0 text-[1.125rem] leading-[1.75] text-on-surface placeholder:text-outline/40 focus:outline-none resize-none"
         />
       </article>
+
+
+      {}
+      <section className="mb-8 p-6 bg-surface-container-low rounded-xl border border-outline-variant/15">
+        <h4 className="font-bold text-on-surface mb-2">Categorías</h4>
+        <p className="text-sm text-on-surface-variant mb-4">
+          Selecciona una o más categorías para este artículo.
+        </p>
+
+        {availableCategories.length === 0 ? (
+          <p className="text-xs text-on-surface-variant italic">No hay categorías disponibles.</p>
+        ) : (
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+            {availableCategories.map((category) => {
+              const isChecked = selectedCategoryIds.includes(category.id);
+              return (
+                <label 
+                  key={category.id} 
+                  className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer select-none transition-all duration-200 ${
+                    isChecked 
+                      ? "border-primary bg-primary/5 text-primary" 
+                      : "border-outline-variant/30 hover:bg-surface-container-high text-on-surface"
+                  }`}
+                >
+                  <input
+                    type="checkbox"
+                    checked={isChecked}
+                    onChange={() => handleCategoryChange(category.id)}
+                    className="rounded border-outline-variant text-primary focus:ring-primary w-4 h-4"
+                  />
+                  <span className="text-sm font-medium">{category.name}</span>
+                </label>
+              );
+            })}
+          </div>
+        )}
+      </section>       
+
+
+
 
       {(validationError || error) && (
         <p className="text-error text-sm mb-4">

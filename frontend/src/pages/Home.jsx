@@ -52,11 +52,11 @@ export default function Home() {
 
         {!loading && !error && posts.length > 0 && (
           <div className="flex-1">
-              <div className="grid md:grid-cols-2 gap-8">
-                {posts.map((post) => (
-                  <PostCard key={post.id} post={post} onClickCat={handleCategoryChange}/>
-                ))}
-              </div>
+            <div className="grid md:grid-cols-2 gap-8">
+              {posts.map((post) => (
+                <PostCard key={post.id} post={post} onClickCat={handleCategoryChange} />
+              ))}
+            </div>
           </div>
         )}
       </main>

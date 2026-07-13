@@ -3,40 +3,8 @@ import { getByPostId } from "../services/comment.service";
 import Spinner from "./common/Spinner";
 import ErrorMessage from "./common/ErrorMessage";
 import EmptyState from "./common/EmptyState";
-
-const getRelativeDate = (date) => {
-  const now = new Date();
-  const commentDate = new Date(date);
-  const diffInSeconds = Math.floor((now - commentDate) / 1000);
-
-  if (diffInSeconds < 60) {
-    return "hace unos segundos";
-  }
-
-  const diffInMinutes = Math.floor(diffInSeconds / 60);
-
-  if (diffInMinutes < 60) {
-    return `hace ${diffInMinutes} min`;
-  }
-
-  const diffInHours = Math.floor(diffInMinutes / 60);
-
-  if (diffInHours < 24) {
-    return `hace ${diffInHours} h`;
-  }
-
-  const diffInDays = Math.floor(diffInHours / 24);
-
-  if (diffInDays < 7) {
-    return `hace ${diffInDays} día${diffInDays === 1 ? "" : "s"}`;
-  }
-
-  return commentDate.toLocaleDateString("es-AR", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-  });
-};
+import { formatDistanceToNow } from "date-fns";
+import { es } from "date-fns/locale";
 
 export default function CommentSection({ postId }) {
   const [comments, setComments] = useState([]);
@@ -84,21 +52,28 @@ export default function CommentSection({ postId }) {
           {comments.map((comment) => (
             <article
               key={comment.id}
-              className="rounded-lg border border-slate-200 bg-slate-50 p-4"
+              className="group"
             >
-              <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
-                <h3 className="font-medium text-slate-900">
-                  {comment.author?.name || "Autor desconocido"}
-                </h3>
-
-                <span className="text-sm text-slate-500">
-                  {getRelativeDate(comment.createdAt)}
-                </span>
+              <div className="flex gap-4">
+                <img alt="User" className="w-10 h-10 rounded-full"
+                  data-alt="portrait of a woman with curly hair and creative style in soft natural lighting"
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuDmo4xfx_1W1_yNG7os5cBH9tVTveN1vQiYqkZ8o-HnaI8ChyJlzw0tAk_R5-nab0hdVUeoJKC6jLQjS8-U9LRjGaQYcozUSXGKuYzyM08QkwYKr93T2KeiNcWybg_l2zV3m2cNWoAIjbJTVdKIZWkG1SOoVR9XvaZtHcyuS1D8Jr7yFcHntlBpA7_HqngIx2lcNwSCpVjltIAjDuX5yYnWZhPqahd_QVjcV64xvjzJ1Tj6SWLCpFzT7nSPf13on4rSA_9uFZDAdpRB" />
+                <div className="flex-1">
+                  <div className="flex items-center justify-between mb-1">
+                    <div className="flex items-center gap-2">
+                      <span className="font-bold text-on-surface">{comment.author?.name || "Autor desconocido"}</span>
+                      <span className="text-xs text-on-surface-variant">{formatDistanceToNow(new Date(comment.createdAt), { addSuffix: true, locale: es })}</span>
+                    </div>
+                    <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <button className="text-on-surface-variant hover:text-primary"><span
+                        className="material-symbols-outlined text-[18px]">edit</span></button>
+                      <button className="text-on-surface-variant hover:text-error"><span
+                        className="material-symbols-outlined text-[18px]">delete</span></button>
+                    </div>
+                  </div>
+                  <p className="text-on-surface-variant leading-relaxed">{comment.content}</p>
+                </div>
               </div>
-
-              <p className="whitespace-pre-wrap text-slate-700">
-                {comment.content}
-              </p>
             </article>
           ))}
         </div>

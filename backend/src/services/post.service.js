@@ -1,7 +1,13 @@
 import prisma from "../repository/Prisma/prisma.db.js";
 import CustomError from "../utils/customError.js";
 
-export const create = async (title, content, authorId, published, coverImage) => {
+export const create = async (
+  title,
+  content,
+  authorId,
+  published,
+  coverImage,
+) => {
   const newPost = await prisma.post.create({
     data: {
       title,
@@ -111,7 +117,14 @@ const validateOwnership = async (id, user) => {
   return postId;
 };
 
-export const updatePost = async (id, title, content, user, published, coverImage) => {
+export const updatePost = async (
+  id,
+  title,
+  content,
+  user,
+  published,
+  coverImage,
+) => {
   const postId = await validateOwnership(id, user);
 
   return await prisma.post.update({
@@ -120,7 +133,7 @@ export const updatePost = async (id, title, content, user, published, coverImage
       title,
       content,
       published: published !== undefined ? Boolean(published) : undefined,
-      coverImage: coverImage !== undefined ? (coverImage || null) : undefined,
+      coverImage: coverImage !== undefined ? coverImage || null : undefined,
     },
     include: {
       author: {

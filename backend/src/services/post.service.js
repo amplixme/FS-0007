@@ -22,10 +22,28 @@ export const create = async (title, content, authorId, published, coverImage) =>
   return newPost;
 };
 
-export const getAllPublishedPosts = async (category) => {
+export const getAllPublishedPosts = async ({ category, page = 1, limit = 10, sort = "newest" }) => {
+  const pageNum = parseInt(page) || 1;
+  const limitNum = parseInt(limit) || 10;
+  const offset = (pageNum - 1) * limitNum;
+
   const where = {
     published: true,
   };
+
+  let orderBy;
+  switch (sort) {
+    case "oldest":
+      orderBy = { createdAt: "asc" };
+      break;
+    case "comments":
+      orderBy = { comments: { _count: "desc" } };
+      break;
+    case "newest":
+    default:
+      orderBy = { createdAt: "desc" };
+      break;
+  }
 
   if (category) {
     where.categories = {
@@ -35,35 +53,41 @@ export const getAllPublishedPosts = async (category) => {
     };
   }
 
-  const posts = await prisma.post.findMany({
-    where,
-    include: {
-      author: {
-        select: {
-          name: true,
+  const [posts, total] = await Promise.all([
+    prisma.post.findMany({
+      where,
+      orderBy,
+      skip: offset,
+      take: limitNum,
+      include: {
+        _count: {
+          select: {
+            comments: true
+          }
+        },
+        author: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        categories: {
+          select: {
+            name: true,
+            slug: true,
+          },
         },
       },
-      categories: {
-        select: {
-          name: true,
-          slug: true,
-        },
-      },
-      _count: {
-        select: {
-          comments: true,
-        },
-      },
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
+    }),
+    prisma.post.count({ where }),
+  ]);
 
-  return posts.map(({ _count, ...post }) => ({
-    ...post,
-    commentCount: _count.comments,
-  }));
+  return {
+    data: posts,
+    total,
+    page: pageNum,
+    totalPages: Math.ceil(total / limitNum),
+  };
 };
 
 export const getPostById = async (id) => {

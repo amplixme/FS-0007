@@ -1,4 +1,7 @@
 import { useNavigate } from "react-router-dom";
+//import { formatRelativeTime } from "../utils/time";
+import { formatDistanceToNow } from "date-fns";
+import { es } from "date-fns/locale";
 
 export default function PostCard({ post, onClickCat }) {
   const navigate = useNavigate();
@@ -39,8 +42,10 @@ export default function PostCard({ post, onClickCat }) {
                 data-alt="friendly woman with artistic style smiling, bright studio portrait with warm tones"
                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuCxfJ7jX1JeifoJSEDRlUgWY4EG3Oy8QYun6HYH4D2nTuvs82HNMnFI7QjaYEfGbC-TPGTNsriNT9w7CsE6SSyhT9sPeX_yYa1Gk8jXkBAdjKYncivpfdbjIC69pW2HLJgGN3jAJD4I2zq7qZqeUcieNUblltJouIHJhnF-B6ntJi6Dg4jwuTMiDBKFCjcULPynm-XlI0KETN92Y4qL0-ojDewsLIguLPGv7j_Ju_ARqT0gK0ZZOHvASKXPog-r4g3oq1zDJJp5xLeq" />
             </div>
-            <span>{post.author?.name || "Autor desconocido"}</span>
-            <span>{new Date(post.createdAt).toLocaleDateString()}</span>
+            <div>
+              <p className="text-xs font-bold">{post.author?.name || "Autor desconocido"}</p>
+              <p className="text-[10px] text-outline">{formatDistanceToNow(new Date(post.createdAt), { addSuffix: true, locale: es })}</p>
+            </div>
           </div>
           <div className="flex items-center gap-1 text-outline">
             <span className="material-symbols-outlined text-sm">forum</span>
@@ -53,9 +58,9 @@ export default function PostCard({ post, onClickCat }) {
               key={crypto.randomUUID()}
               className="px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-700 hover:bg-blue-200"
               onClick={(e) => {
-                  e.stopPropagation()
-                  onClickCat(category.slug)
-                }
+                e.stopPropagation()
+                onClickCat(category.slug)
+              }
               }
             >
               {category.name}

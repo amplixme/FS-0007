@@ -1,16 +1,16 @@
 import api from "./api";
 
-export const getByPostId = async (postId) => {
+export const getCommentByPostId = async (postId) => {
   const response = await api.get(`/posts/${postId}/comments`);
   return response.data;
 };
 
-export const create = async (postId, data) => {
+export const createComment = async (postId, data) => {
   const response = await api.post(`/posts/${postId}/comments`, data);
   return response.data;
 };
 
-export const update = async (id, data) => {
+export const updateComment = async (id, data) => {
   const response = await api.put(`/comments/${id}`, data);
   return response.data;
 };

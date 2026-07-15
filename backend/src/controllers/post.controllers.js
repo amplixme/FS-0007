@@ -22,8 +22,8 @@ export const createPost = async (req, res, next) => {
 
 export const getPostsController = async (req, res, next) => {
   try {
-    const { category } = req.query;
-    const posts = await getAllPublishedPosts(category);
+    const { category, page, limit, sort } = req.query;
+    const posts = await getAllPublishedPosts({ category, page, limit, sort });
     success(res, posts, 200);
   } catch (err) {
     next(err);

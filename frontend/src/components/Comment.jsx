@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
-import getRelativeDate from '../utils/getRelativeDate.js'
 import ConfirmModal from '../components/common/ConfirmModal'
+import { formatDistanceToNow } from "date-fns";
+import { es } from "date-fns/locale";
 
 const Comment = ({ comment, deleteComment, updateComment }) => {
     const { user } = useAuth();
@@ -33,7 +34,7 @@ const Comment = ({ comment, deleteComment, updateComment }) => {
                                 {comment.author?.name || "Autor desconocido"}
                             </span>
                             <span className="text-xs text-on-surface-variant">
-                                {getRelativeDate(comment.createdAt)}
+                                {formatDistanceToNow(new Date(comment.createdAt), { addSuffix: true, locale: es })}
                             </span>
                         </div>
                         {user?.id === comment.authorId &&

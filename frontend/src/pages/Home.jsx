@@ -2,16 +2,28 @@ import { useCallback, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import PostCard from "../components/PostCard";
 import CategoryFilter from "../components/CategoryFilter";
-import { getPosts } from "../services/post.service";
+import Pagination from "../components/common/Pagination";
+import { getAll } from "../services/post.service";
 import Spinner from "../components/common/Spinner";
 import ErrorMessage from "../components/common/ErrorMessage";
 import EmptyState from "../components/common/EmptyState";
 
+const POSTS_LIMIT = 10;
+
 export default function Home() {
   const [searchParams, setSearchParams] = useSearchParams();
+
   const activeSlug = searchParams.get("category");
+  const currentPage = Number(searchParams.get("page")) || 1;
+  const sort = searchParams.get("sort") || undefined;
+  const search = searchParams.get("search") || undefined;
 
   const [posts, setPosts] = useState([]);
+  const [pagination, setPagination] = useState({
+    total: 0,
+    page: 1,
+    totalPages: 1,
+  });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -19,18 +31,54 @@ export default function Home() {
     setLoading(true);
     setError(null);
 
-    getPosts(activeSlug)
-      .then((data) => setPosts(data.data))
+    getAll({
+      page: currentPage,
+      limit: POSTS_LIMIT,
+      category: activeSlug,
+      sort,
+      search,
+    })
+      .then((data) => {
+        setPosts(data.data || []);
+        setPagination({
+          total: data.total || 0,
+          page: data.page || currentPage,
+          totalPages: data.totalPages || 1,
+        });
+      })
       .catch(() => setError("Error al cargar las publicaciones"))
       .finally(() => setLoading(false));
-  }, [activeSlug]);
+  }, [activeSlug, currentPage, sort, search]);
 
   useEffect(() => {
     loadPosts();
   }, [loadPosts]);
 
+  const updateSearchParams = (updates) => {
+    const nextParams = new URLSearchParams(searchParams);
+
+    Object.entries(updates).forEach(([key, value]) => {
+      if (value) {
+        nextParams.set(key, value);
+      } else {
+        nextParams.delete(key);
+      }
+    });
+
+    setSearchParams(nextParams);
+  };
+
   const handleCategoryChange = (slug) => {
-    setSearchParams(slug ? { category: slug } : {});
+    updateSearchParams({
+      category: slug,
+      page: "1",
+    });
+  };
+
+  const handlePageChange = (page) => {
+    updateSearchParams({
+      page: String(page),
+    });
   };
 
   return (
@@ -51,13 +99,23 @@ export default function Home() {
         )}
 
         {!loading && !error && posts.length > 0 && (
-          <div className="flex-1">
-            <div className="grid md:grid-cols-2 gap-8">
+          <>
+            <div className="grid gap-8 md:grid-cols-2">
               {posts.map((post) => (
-                <PostCard key={post.id} post={post} onClickCat={handleCategoryChange} />
+                <PostCard
+                  key={post.id}
+                  post={post}
+                  onClickCat={handleCategoryChange}
+                />
               ))}
             </div>
-          </div>
+
+            <Pagination
+              page={pagination.page}
+              totalPages={pagination.totalPages}
+              onPageChange={handlePageChange}
+            />
+          </>
         )}
       </main>
     </div>

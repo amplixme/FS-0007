@@ -19,7 +19,7 @@ export default function Home() {
     setLoading(true);
     setError(null);
 
-    getPosts(activeSlug)
+    getPosts({category:activeSlug})
       .then((data) => setPosts(data.data))
       .catch(() => setError("Error al cargar las publicaciones"))
       .finally(() => setLoading(false));
@@ -46,14 +46,14 @@ export default function Home() {
           <ErrorMessage message={error} onRetry={loadPosts} />
         )}
 
-        {!loading && !error && !posts.length && (
+        {!loading && !error && !posts.data.length && (
           <EmptyState message="Todavía no existen publicaciones." />
         )}
 
-        {!loading && !error && posts.length > 0 && (
+        {!loading && !error && posts.data.length > 0 && (
           <div className="flex-1">
             <div className="grid md:grid-cols-2 gap-8">
-              {posts.map((post) => (
+              {posts.data.map((post) => (
                 <PostCard key={post.id} post={post} onClickCat={handleCategoryChange} />
               ))}
             </div>

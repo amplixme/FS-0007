@@ -1,9 +1,12 @@
 import api from "./api";
 
-export const getPosts = async (category) => {
+export const getPosts = async ({category, authorId}) => {
   try {
+    const params = {}
+    if(category) params.category = category
+    if(authorId) params.authorId = authorId
     const response = await api.get("/posts", {
-      params: category ? { category } : {},
+      params: params,
     });
     return response.data;
   } catch (error) {

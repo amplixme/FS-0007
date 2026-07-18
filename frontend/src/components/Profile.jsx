@@ -1,7 +1,6 @@
 import {useAuth} from '../context/AuthContext.jsx'
 const Profile = ({ profile, onClickEdit }) => {
     const {user} = useAuth()
-    console.log(user)
     return (
         <section className="max-w-[900px] mx-auto mb-12">
             <div

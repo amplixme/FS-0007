@@ -31,7 +31,7 @@ export default function Home() {
     setLoading(true);
     setError(null);
 
-    getAll({
+    getPosts({
       page: currentPage,
       limit: POSTS_LIMIT,
       category: activeSlug,
@@ -94,19 +94,15 @@ export default function Home() {
           <ErrorMessage message={error} onRetry={loadPosts} />
         )}
 
-        {!loading && !error && !posts.length && (
+        {!loading && !error && !posts.data.length && (
           <EmptyState message="Todavía no existen publicaciones." />
         )}
 
-        {!loading && !error && posts.length > 0 && (
-          <>
-            <div className="grid gap-8 md:grid-cols-2">
-              {posts.map((post) => (
-                <PostCard
-                  key={post.id}
-                  post={post}
-                  onClickCat={handleCategoryChange}
-                />
+        {!loading && !error && posts.data.length > 0 && (
+          <div className="flex-1">
+            <div className="grid md:grid-cols-2 gap-8">
+              {posts.data.map((post) => (
+                <PostCard key={post.id} post={post} onClickCat={handleCategoryChange} />
               ))}
             </div>
 

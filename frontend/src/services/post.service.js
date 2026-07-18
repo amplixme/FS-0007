@@ -1,11 +1,12 @@
 import api from "./api";
 
-export const getAll = async ({
+export const getPosts = async ({
   page = 1,
   limit = 10,
   category,
   sort,
   search,
+  authorId,
 } = {}) => {
   try {
     const response = await api.get("/posts", {
@@ -15,6 +16,7 @@ export const getAll = async ({
         category: category || undefined,
         sort: sort || undefined,
         search: search || undefined,
+        authorId: authorId || undefined,
       },
     });
 

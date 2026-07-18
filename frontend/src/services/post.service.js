@@ -30,10 +30,6 @@ export const getPosts = async ({
   }
 };
 
-export const getPosts = async (category) => {
-  return getAll({ category });
-};
-
 export const getPostById = async (id) => {
   try {
     const response = await api.get(`/posts/${id}`);

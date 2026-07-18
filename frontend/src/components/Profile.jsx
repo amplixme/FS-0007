@@ -1,6 +1,7 @@
 import {useAuth} from '../context/AuthContext.jsx'
 const Profile = ({ profile, onClickEdit }) => {
     const {user} = useAuth()
+    console.log(user)
     return (
         <section className="max-w-[900px] mx-auto mb-12">
             <div
@@ -43,7 +44,7 @@ const Profile = ({ profile, onClickEdit }) => {
                                 data-icon="article">
                                 article
                             </span>
-                            {profile._count.posts} publicaciones
+                            {profile._count.posts == 1 ? `${profile._count.posts} Publicación` : `${profile._count.posts} Publicaciones` } 
                         </span>
                         <span className="w-1 h-1 bg-slate-300 rounded-full"></span>
                         <span className="flex items-center gap-1.5">

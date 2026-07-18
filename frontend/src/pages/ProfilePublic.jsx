@@ -48,14 +48,14 @@ const ProfilePublic = () => {
           <ErrorMessage message={errorPost} onRetry={reloadPost} />
         )}
 
-        {!isLoadingPost && !errorPost && !posts.data.length && (
+        {!isLoadingPost && !errorPost && !posts.length && (
           <EmptyState message="Todavía no existen publicaciones." />
         )}
 
-        {!isLoadingPost && !errorPost && posts.data.length > 0 && (
+        {!isLoadingPost && !errorPost && posts.length > 0 && (
           <div className="flex-1">
             <div className="grid md:grid-cols-2 gap-8">
-              {posts.data.map((post) => (
+              {posts.map((post) => (
                 <PostCard key={post.id} post={post} onClickCat={() => { console.log('categoria') }} />
               ))}
             </div>

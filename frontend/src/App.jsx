@@ -8,22 +8,43 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import CreatePost from "./pages/CreatePost";
 import PostDetail from "./pages/PostDetail";
 import CategoriesAdmin from "./pages/CategoriesAdmin";
+import NotFound from "./pages/NotFound";
+import ErrorBoundary from "./components/common/ErrorBoundary";
+
 function App() {
   return (
-    <BrowserRouter>
-      <AuthProvider>
-        <Layout>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/crear" element={<ProtectedRoute><CreatePost /></ProtectedRoute>} />
-            <Route path="/posts/:id" element={<PostDetail />} />
-            <Route path="/categorias" element={  <ProtectedRoute>  <CategoriesAdmin />  </ProtectedRoute> }/>
-          </Routes>
-        </Layout>
-      </AuthProvider>
-    </BrowserRouter>
+    <ErrorBoundary>
+      <BrowserRouter>
+        <AuthProvider>
+          <Layout>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route
+                path="/crear"
+                element={
+                  <ProtectedRoute>
+                    <CreatePost />
+                  </ProtectedRoute>
+                }
+              />
+              <Route path="/posts/:id" element={<PostDetail />} />
+              <Route
+                path="/categorias"
+                element={
+                  <ProtectedRoute>
+                    {" "}
+                    <CategoriesAdmin />{" "}
+                  </ProtectedRoute>
+                }
+              />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </Layout>
+        </AuthProvider>
+      </BrowserRouter>
+    </ErrorBoundary>
   );
 }
 

@@ -8,6 +8,8 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import CreatePost from "./pages/CreatePost";
 import PostDetail from "./pages/PostDetail";
 import CategoriesAdmin from "./pages/CategoriesAdmin";
+import ProtectedAdminRoute from "./components/ProtectedAminRoute";
+import AdminPage from "./components/admin/AdminPage";
 function App() {
   return (
     <BrowserRouter>
@@ -19,7 +21,17 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/crear" element={<ProtectedRoute><CreatePost /></ProtectedRoute>} />
             <Route path="/posts/:id" element={<PostDetail />} />
-            <Route path="/categorias" element={  <ProtectedRoute>  <CategoriesAdmin />  </ProtectedRoute> }/>
+            <Route path="/categorias" element={<ProtectedRoute>  <CategoriesAdmin />  </ProtectedRoute>} />
+            <Route
+              path="/admin"
+              element={
+                <ProtectedRoute>
+                  <ProtectedAdminRoute>
+                    <AdminPage />
+                  </ProtectedAdminRoute>
+                </ProtectedRoute>
+              }
+            />
           </Routes>
         </Layout>
       </AuthProvider>

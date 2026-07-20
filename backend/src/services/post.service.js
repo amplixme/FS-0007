@@ -28,7 +28,7 @@ export const create = async (
   return newPost;
 };
 
-export const getAllPublishedPosts = async ({ category, page = 1, limit = 10, sort = "newest" }) => {
+export const getAllPublishedPosts = async ({ category, page = 1, limit = 10, sort = "newest", authorId, search }) => {
   const pageNum = parseInt(page) || 1;
   const limitNum = parseInt(limit) || 10;
   const offset = (pageNum - 1) * limitNum;
@@ -36,6 +36,10 @@ export const getAllPublishedPosts = async ({ category, page = 1, limit = 10, sor
   const where = {
     published: true,
   };
+
+  if (authorId) {
+    where.authorId = Number(authorId);
+  }
 
   let orderBy;
   switch (sort) {
@@ -57,6 +61,13 @@ export const getAllPublishedPosts = async ({ category, page = 1, limit = 10, sor
         slug: category,
       },
     };
+  }
+
+  if (search) {
+    where.OR = [
+      { title: { contains: search, mode: "insensitive" } },
+      { content: { contains: search, mode: "insensitive" } },
+    ];
   }
 
   const [posts, total] = await Promise.all([

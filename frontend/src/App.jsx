@@ -10,6 +10,7 @@ import PostDetail from "./pages/PostDetail";
 import CategoriesAdmin from "./pages/CategoriesAdmin";
 import NotFound from "./pages/NotFound";
 import ErrorBoundary from "./components/common/ErrorBoundary";
+import ProfilePublic from "./pages/ProfilePublic";
 
 function App() {
   return (
@@ -40,6 +41,7 @@ function App() {
                 }
               />
               <Route path="*" element={<NotFound />} />
+              <Route path="/profile/:id" element={<ProfilePublic />} />
             </Routes>
           </Layout>
         </AuthProvider>

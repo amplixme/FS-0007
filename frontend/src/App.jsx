@@ -8,6 +8,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import CreatePost from "./pages/CreatePost";
 import PostDetail from "./pages/PostDetail";
 import CategoriesAdmin from "./pages/CategoriesAdmin";
+import ProfilePublic from "./pages/ProfilePublic";
 import ProtectedAdminRoute from "./components/ProtectedAminRoute";
 import AdminPage from "./components/admin/AdminPage";
 function App() {
@@ -32,6 +33,7 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            <Route path="/profile/:id" element={<ProfilePublic />} />
           </Routes>
         </Layout>
       </AuthProvider>

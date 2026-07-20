@@ -16,7 +16,6 @@ export default function useComments(postId) {
 
     try {
       setIsLoading(true);
-      setError("");
 
       const response = await getCommentByPostId(postId);
 

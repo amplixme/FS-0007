@@ -28,14 +28,15 @@ export const getPublicProfile = async (userId) => {
   if (isNaN(id)) {
     throw new CustomError(400, "ID de usuario inválido");
   }
-
   const user = await prisma.user.findUnique({
     where: {
       id,
     },
     select: {
+      id:true,
       name: true,
       bio: true,
+      createdAt: true,
       avatarUrl: true,
       _count: {
         select: {
@@ -44,6 +45,7 @@ export const getPublicProfile = async (userId) => {
       },
     },
   });
+  return user
 };
 
 export const updateProfile = async (userId, name, bio, avatarUrl) => {

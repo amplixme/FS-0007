@@ -113,7 +113,11 @@ function PostDetail() {
         <h1 className="text-3xl font-bold text-slate-900">{post.title}</h1>
 
         <div className="mt-4 flex flex-wrap gap-x-4 gap-y-2 text-sm text-slate-500">
-          <span>Por {post.author?.name || "Autor desconocido"}</span>
+          <Link
+            to={`/profile/${post.authorId}`}
+          >
+              Por {post.author?.name || "Autor desconocido"}
+          </Link>
           <span>
             {new Date(post.createdAt).toLocaleDateString("es-AR", {
               day: "2-digit",

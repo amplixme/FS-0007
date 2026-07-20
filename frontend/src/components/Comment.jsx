@@ -37,51 +37,55 @@ const Comment = ({ comment, deleteComment, updateComment }) => {
                                 {formatDistanceToNow(new Date(comment.createdAt), { addSuffix: true, locale: es })}
                             </span>
                         </div>
-                        {user?.id === comment.authorId &&
-                            !isEditing ? (
-                            <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                <button
-                                    onClick={() => setIsEditing(true)}
-                                    className="text-on-surface-variant hover:text-primary"
-                                >
-                                    <span className="material-symbols-outlined text-[18px]">
-                                        edit
-                                    </span>
-                                </button>
+                        {user &&
+                            (
+                                user?.id === comment.authorId && (
+                                    !isEditing ? (
+                                        <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                            <button
+                                                onClick={() => setIsEditing(true)}
+                                                className="text-on-surface-variant hover:text-primary"
+                                            >
+                                                <span className="material-symbols-outlined text-[18px]">
+                                                    edit
+                                                </span>
+                                            </button>
 
-                                <button
-                                    onClick={() => setShowDeleteModal(true)}
-                                    className="text-on-surface-variant hover:text-error"
-                                >
-                                    <span className="material-symbols-outlined text-[18px]">
-                                        delete
-                                    </span>
-                                </button>
-                            </div>
-                        ) : (
-                            <div className="flex gap-2">
-                                <button
-                                    onClick={handleSave}
-                                    className="text-on-surface-variant hover:text-green-500"
-                                >
-                                    <span className="material-symbols-outlined text-[20px]">
-                                        check
-                                    </span>
-                                </button>
+                                            <button
+                                                onClick={() => setShowDeleteModal(true)}
+                                                className="text-on-surface-variant hover:text-error"
+                                            >
+                                                <span className="material-symbols-outlined text-[18px]">
+                                                    delete
+                                                </span>
+                                            </button>
+                                        </div>
+                                    ) : (
+                                        <div className="flex gap-2">
+                                            <button
+                                                onClick={handleSave}
+                                                className="text-on-surface-variant hover:text-green-500"
+                                            >
+                                                <span className="material-symbols-outlined text-[20px]">
+                                                    check
+                                                </span>
+                                            </button>
 
-                                <button
-                                    onClick={() => {
-                                        setContent(comment.content);
-                                        setIsEditing(false);
-                                    }}
-                                    className="text-on-surface-variant hover:text-error"
-                                >
-                                    <span className="material-symbols-outlined text-[20px]">
-                                        cancel
-                                    </span>
-                                </button>
-                            </div>
-                        )
+                                            <button
+                                                onClick={() => {
+                                                    setContent(comment.content);
+                                                    setIsEditing(false);
+                                                }}
+                                                className="text-on-surface-variant hover:text-error"
+                                            >
+                                                <span className="material-symbols-outlined text-[20px]">
+                                                    cancel
+                                                </span>
+                                            </button>
+                                        </div>
+                                    )
+                                )
+                            )   
                         }
                     </div>
                     {isEditing ? (

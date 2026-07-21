@@ -16,7 +16,6 @@ export const getPublicProfileController = async (req, res, next) => {
 export const updateProfileController = async (req, res, next) => {
   try {
     const { name, bio, avatarUrl } = req.body;
-
     const profile = await updateProfile(req.user.userId, name, bio, avatarUrl);
 
     success(res, profile, 200);

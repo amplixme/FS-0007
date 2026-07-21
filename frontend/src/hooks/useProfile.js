@@ -29,6 +29,7 @@ export const useProfile = (userId) => {
   }, [userId]);
 
   useEffect(() => {
+    if (!userId) return;
     loadProfile();
   }, [loadProfile]);
 

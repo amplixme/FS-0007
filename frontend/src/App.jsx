@@ -43,6 +43,16 @@ function App() {
                 }
               />
               <Route path="*" element={<NotFound />} />
+              <Route
+                path="/admin"
+                element={
+                  <ProtectedRoute>
+                    <ProtectedAdminRoute>
+                      <AdminPage />
+                    </ProtectedAdminRoute>
+                  </ProtectedRoute>
+                }
+              />
               <Route path="/profile/:id" element={<ProfilePublic />} />
             </Routes>
           </Layout>

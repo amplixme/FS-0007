@@ -21,7 +21,6 @@ const CommentCards = () => {
         try {
             setIsLoading(true);
             const commentData = await getAdminComment({ page: currPage, limit: 10 });
-            console.log("Datos de comentarios:", commentData);
             setComentarios(commentData.data.data);
             setTotalPages(commentData.data.totalPages);
 

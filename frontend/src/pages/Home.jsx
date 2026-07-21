@@ -11,12 +11,18 @@ import EmptyState from "../components/common/EmptyState";
 const POSTS_LIMIT = 10;
 const SEARCH_DEBOUNCE_TIME = 300;
 
+const SORT_OPTIONS = [
+  { value: "newest", label: "Más recientes" },
+  { value: "oldest", label: "Más antiguos" },
+  { value: "comments", label: "Más comentados" },
+];
+
 export default function Home() {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const activeSlug = searchParams.get("category");
   const currentPage = Number(searchParams.get("page")) || 1;
-  const sort = searchParams.get("sort") || undefined;
+  const sort = searchParams.get("sort") || "newest";
   const search = searchParams.get("search") || "";
 
   const [posts, setPosts] = useState([]);
@@ -107,6 +113,13 @@ export default function Home() {
     });
   };
 
+  const handleSortChange = (event) => {
+    updateSearchParams({
+      sort: event.target.value,
+      page: "1",
+    });
+  };
+
   const handleClearSearch = () => {
     setSearchInput("");
     updateSearchParams({
@@ -122,34 +135,55 @@ export default function Home() {
       </aside>
 
       <main>
-        <div className="mb-6">
-          <label
-            htmlFor="post-search"
-            className="mb-2 block text-sm font-medium text-slate-700"
-          >
-            Buscar publicaciones
-          </label>
+        <div className="mb-6 flex flex-col gap-4">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <h1 className="text-2xl font-bold text-slate-900">Publicaciones</h1>
 
-          <div className="relative">
-            <input
-              id="post-search"
-              type="search"
-              value={searchInput}
-              onChange={(event) => setSearchInput(event.target.value)}
-              placeholder="Buscar por título o contenido..."
-              className="w-full rounded-lg border border-slate-300 bg-white px-4 py-2 pr-10 text-sm text-slate-700 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
-            />
-
-            {searchInput && (
-              <button
-                type="button"
-                onClick={handleClearSearch}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-sm font-bold text-slate-500 hover:text-slate-800"
-                aria-label="Limpiar búsqueda"
+            <label className="flex items-center gap-2 text-sm font-medium text-slate-700">
+              Ordenar por
+              <select
+                value={sort}
+                onChange={handleSortChange}
+                className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
               >
-                X
-              </button>
-            )}
+                {SORT_OPTIONS.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
+
+          <div>
+            <label
+              htmlFor="post-search"
+              className="mb-2 block text-sm font-medium text-slate-700"
+            >
+              Buscar publicaciones
+            </label>
+
+            <div className="relative">
+              <input
+                id="post-search"
+                type="search"
+                value={searchInput}
+                onChange={(event) => setSearchInput(event.target.value)}
+                placeholder="Buscar por título o contenido..."
+                className="w-full rounded-lg border border-slate-300 bg-white px-4 py-2 pr-10 text-sm text-slate-700 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+              />
+
+              {searchInput && (
+                <button
+                  type="button"
+                  onClick={handleClearSearch}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-sm font-bold text-slate-500 hover:text-slate-800"
+                  aria-label="Limpiar búsqueda"
+                >
+                  X
+                </button>
+              )}
+            </div>
           </div>
         </div>
 

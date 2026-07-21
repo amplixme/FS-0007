@@ -27,8 +27,8 @@ function App() {
               <Route path="/register" element={<Register />} />
               <Route path="/crear" element={<ProtectedRoute><CreatePost /></ProtectedRoute>} />
               <Route path="/posts/:id" element={<PostDetail />} />
-              <Route path="/categorias" element={  <ProtectedRoute>  <CategoriesAdmin />  </ProtectedRoute> }/>
-              <Route path="/profile/:id" element={ <ProfilePublic />}/>
+              <Route path="/categorias" element={<ProtectedRoute>  <CategoriesAdmin />  </ProtectedRoute>} />
+              <Route path="/profile/:id" element={<ProfilePublic />} />
               <Route path="/profile/editar" element={ <ProtectedRoute> <ProfileEdit /> </ProtectedRoute> }/>
               <Route path="*" element={<NotFound />} />
               <Route

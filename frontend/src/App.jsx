@@ -9,6 +9,7 @@ import CreatePost from "./pages/CreatePost";
 import PostDetail from "./pages/PostDetail";
 import CategoriesAdmin from "./pages/CategoriesAdmin";
 import ProfilePublic from "./pages/ProfilePublic";
+import ProfileEdit from "./pages/ProfileEdit";
 function App() {
   return (
     <BrowserRouter>
@@ -22,6 +23,7 @@ function App() {
             <Route path="/posts/:id" element={<PostDetail />} />
             <Route path="/categorias" element={  <ProtectedRoute>  <CategoriesAdmin />  </ProtectedRoute> }/>
             <Route path="/profile/:id" element={ <ProfilePublic />}/>
+            <Route path="/profile/editar" element={ <ProtectedRoute> <ProfileEdit /> </ProtectedRoute> }/>
           </Routes>
         </Layout>
       </AuthProvider>

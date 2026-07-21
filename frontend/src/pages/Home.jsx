@@ -10,12 +10,18 @@ import EmptyState from "../components/common/EmptyState";
 
 const POSTS_LIMIT = 10;
 
+const SORT_OPTIONS = [
+  { value: "newest", label: "Más recientes" },
+  { value: "oldest", label: "Más antiguos" },
+  { value: "comments", label: "Más comentados" },
+];
+
 export default function Home() {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const activeSlug = searchParams.get("category");
   const currentPage = Number(searchParams.get("page")) || 1;
-  const sort = searchParams.get("sort") || undefined;
+  const sort = searchParams.get("sort") || "newest";
   const search = searchParams.get("search") || undefined;
 
   const [posts, setPosts] = useState([]);
@@ -81,6 +87,13 @@ export default function Home() {
     });
   };
 
+  const handleSortChange = (event) => {
+    updateSearchParams({
+      sort: event.target.value,
+      page: "1",
+    });
+  };
+
   return (
     <div className="grid grid-cols-1 gap-6 p-4 md:grid-cols-[260px_1fr] md:p-8">
       <aside className="rounded-2xl bg-white md:sticky md:top-8 md:self-start md:py-4 md:shadow-sm">
@@ -88,6 +101,25 @@ export default function Home() {
       </aside>
 
       <main>
+        <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <h1 className="text-2xl font-bold text-slate-900">Publicaciones</h1>
+
+          <label className="flex items-center gap-2 text-sm font-medium text-slate-700">
+            Ordenar por
+            <select
+              value={sort}
+              onChange={handleSortChange}
+              className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+            >
+              {SORT_OPTIONS.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
+
         {loading && <Spinner />}
 
         {!loading && error && (
@@ -98,23 +130,25 @@ export default function Home() {
           <EmptyState message="Todavía no existen publicaciones." />
         )}
 
-        {!loading && !error && posts.length > 0 && 
-          (
-            <div className="flex-1">
-              <div className="grid md:grid-cols-2 gap-8">
-                {posts.map((post) => (
-                  <PostCard key={post.id} post={post} onClickCat={handleCategoryChange} />
-                ))}
-              </div>
-
-              <Pagination
-                page={pagination.page}
-                totalPages={pagination.totalPages}
-                onPageChange={handlePageChange}
-              />
+        {!loading && !error && posts.length > 0 && (
+          <div className="flex-1">
+            <div className="grid gap-8 md:grid-cols-2">
+              {posts.map((post) => (
+                <PostCard
+                  key={post.id}
+                  post={post}
+                  onClickCat={handleCategoryChange}
+                />
+              ))}
             </div>
-          )
-        }
+
+            <Pagination
+              page={pagination.page}
+              totalPages={pagination.totalPages}
+              onPageChange={handlePageChange}
+            />
+          </div>
+        )}
       </main>
     </div>
   );

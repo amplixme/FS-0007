@@ -18,9 +18,16 @@
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
     "react-dropzone": "^15.0.0",
+<<<<<<< HEAD
     "react-hook-form": "^7.82.0",
     "react-router-dom": "^7.18.0",
     "tailwindcss": "^4.3.3"
+=======
+    "react-router-dom": "^7.18.0",
+    "tailwindcss": "^4.3.3"
+    "react-hook-form": "^7.82.0",
+    "react-router-dom": "^7.18.0"
+>>>>>>> 34ceddf45e3b0025f6f637726c91d34bacb86028
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

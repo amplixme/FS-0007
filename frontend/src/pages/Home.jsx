@@ -9,16 +9,24 @@ import ErrorMessage from "../components/common/ErrorMessage";
 import EmptyState from "../components/common/EmptyState";
 
 const POSTS_LIMIT = 10;
+const SEARCH_DEBOUNCE_TIME = 300;
+
+const SORT_OPTIONS = [
+  { value: "newest", label: "Más recientes" },
+  { value: "oldest", label: "Más antiguos" },
+  { value: "comments", label: "Más comentados" },
+];
 
 export default function Home() {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const activeSlug = searchParams.get("category");
   const currentPage = Number(searchParams.get("page")) || 1;
-  const sort = searchParams.get("sort") || undefined;
-  const search = searchParams.get("search") || undefined;
+  const sort = searchParams.get("sort") || "newest";
+  const search = searchParams.get("search") || "";
 
   const [posts, setPosts] = useState([]);
+  const [searchInput, setSearchInput] = useState(search);
   const [pagination, setPagination] = useState({
     total: 0,
     page: 1,
@@ -36,7 +44,7 @@ export default function Home() {
       limit: POSTS_LIMIT,
       category: activeSlug,
       sort,
-      search,
+      search: search || undefined,
     })
       .then((data) => {
         setPosts(data.data || []);
@@ -54,19 +62,43 @@ export default function Home() {
     loadPosts();
   }, [loadPosts]);
 
-  const updateSearchParams = (updates) => {
-    const nextParams = new URLSearchParams(searchParams);
+  useEffect(() => {
+    setSearchInput(search);
+  }, [search]);
 
-    Object.entries(updates).forEach(([key, value]) => {
-      if (value) {
-        nextParams.set(key, value);
-      } else {
-        nextParams.delete(key);
-      }
-    });
+  const updateSearchParams = useCallback(
+    (updates) => {
+      const nextParams = new URLSearchParams(searchParams);
 
-    setSearchParams(nextParams);
-  };
+      Object.entries(updates).forEach(([key, value]) => {
+        if (value) {
+          nextParams.set(key, value);
+        } else {
+          nextParams.delete(key);
+        }
+      });
+
+      setSearchParams(nextParams);
+    },
+    [searchParams, setSearchParams],
+  );
+
+  useEffect(() => {
+    const normalizedSearch = searchInput.trim();
+
+    if (normalizedSearch === search) {
+      return;
+    }
+
+    const timeoutId = setTimeout(() => {
+      updateSearchParams({
+        search: normalizedSearch,
+        page: "1",
+      });
+    }, SEARCH_DEBOUNCE_TIME);
+
+    return () => clearTimeout(timeoutId);
+  }, [searchInput, search, updateSearchParams]);
 
   const handleCategoryChange = (slug) => {
     updateSearchParams({
@@ -81,6 +113,21 @@ export default function Home() {
     });
   };
 
+  const handleSortChange = (event) => {
+    updateSearchParams({
+      sort: event.target.value,
+      page: "1",
+    });
+  };
+
+  const handleClearSearch = () => {
+    setSearchInput("");
+    updateSearchParams({
+      search: "",
+      page: "1",
+    });
+  };
+
   return (
     <div className="grid grid-cols-1 gap-6 p-4 md:grid-cols-[260px_1fr] md:p-8">
       <aside className="rounded-2xl bg-white md:sticky md:top-8 md:self-start md:py-4 md:shadow-sm">
@@ -88,6 +135,58 @@ export default function Home() {
       </aside>
 
       <main>
+        <div className="mb-6 flex flex-col gap-4">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <h1 className="text-2xl font-bold text-slate-900">Publicaciones</h1>
+
+            <label className="flex items-center gap-2 text-sm font-medium text-slate-700">
+              Ordenar por
+              <select
+                value={sort}
+                onChange={handleSortChange}
+                className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+              >
+                {SORT_OPTIONS.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
+
+          <div>
+            <label
+              htmlFor="post-search"
+              className="mb-2 block text-sm font-medium text-slate-700"
+            >
+              Buscar publicaciones
+            </label>
+
+            <div className="relative">
+              <input
+                id="post-search"
+                type="search"
+                value={searchInput}
+                onChange={(event) => setSearchInput(event.target.value)}
+                placeholder="Buscar por título o contenido..."
+                className="w-full rounded-lg border border-slate-300 bg-white px-4 py-2 pr-10 text-sm text-slate-700 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+              />
+
+              {searchInput && (
+                <button
+                  type="button"
+                  onClick={handleClearSearch}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-sm font-bold text-slate-500 hover:text-slate-800"
+                  aria-label="Limpiar búsqueda"
+                >
+                  X
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+
         {loading && <Spinner />}
 
         {!loading && error && (
@@ -95,26 +194,28 @@ export default function Home() {
         )}
 
         {!loading && !error && !posts.length && (
-          <EmptyState message="Todavía no existen publicaciones." />
+          <EmptyState message="No se encontraron publicaciones." />
         )}
 
-        {!loading && !error && posts.length > 0 && 
-          (
-            <div className="flex-1">
-              <div className="grid md:grid-cols-2 gap-8">
-                {posts.map((post) => (
-                  <PostCard key={post.id} post={post} onClickCat={handleCategoryChange} />
-                ))}
-              </div>
-
-              <Pagination
-                page={pagination.page}
-                totalPages={pagination.totalPages}
-                onPageChange={handlePageChange}
-              />
+        {!loading && !error && posts.length > 0 && (
+          <div className="flex-1">
+            <div className="grid gap-8 md:grid-cols-2">
+              {posts.map((post) => (
+                <PostCard
+                  key={post.id}
+                  post={post}
+                  onClickCat={handleCategoryChange}
+                />
+              ))}
             </div>
-          )
-        }
+
+            <Pagination
+              page={pagination.page}
+              totalPages={pagination.totalPages}
+              onPageChange={handlePageChange}
+            />
+          </div>
+        )}
       </main>
     </div>
   );

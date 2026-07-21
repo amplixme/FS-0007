@@ -26,7 +26,7 @@ export default function CreatePost() {
       setError("");
 
       const { data } = await createPost(postData);
-      // navigate(`/posts/${data.id}`);
+      navigate(`/posts/${data.id}`);
     } catch (err) {
       setError(err.message || "Ocurrió un error al crear la publicación.");
     } finally {

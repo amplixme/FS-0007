@@ -1,8 +1,18 @@
 import api from "./api";
 
-export const getAdminStats = () => api.get("/admin/stats").then((res) => res.data.data);
+export const getAdminStats = () => api.get("/admin/stats").then((res) => res.data);
 
-export const getAdminUsers = () => api.get("/admin/users").then((res) => res.data.data);
+export const getAdminUsers = () => api.get("/admin/users").then((res) => res.data);
+
+export const getAdminComment = async ({ page = 1, limit = 10 }) => {
+    const response = await api.get(`/admin/comments`, {
+        params: {
+            page,
+            limit,
+        },
+    });
+    return response.data;
+};
 
 export const createAdminUser = (payload) =>
     api.post("/admin/users", payload).then((res) => res.data);

@@ -65,6 +65,51 @@ export const getUsers = async () => {
     }
 }
 
+export const getAdminComment = async ({ page = 1, limit = 10 }) => {
+    try {
+        const pageNum = parseInt(page) || 1;
+        const limitNum = parseInt(limit) || 10;
+        const offset = (pageNum - 1) * limitNum;
+
+        const [comments, total] = await Promise.all([
+            prisma.comment.findMany({
+                orderBy: {
+                    createdAt: 'desc',
+                },
+                skip: offset,
+                take: limitNum,
+                select: {
+                    id: true,
+                    content: true,
+                    createdAt: true,
+                    post: {
+                        select: {
+                            id: true,
+                            title: true,
+                        },
+                    },
+                    author: {
+                        select: {
+                            id: true,
+                            name: true,
+                        },
+                    },
+                },
+            }),
+            prisma.comment.count(),
+        ]);
+        return {
+            data: comments,
+            total,
+            page: pageNum,
+            totalPages: Math.ceil(total / limitNum),
+        };
+    } catch (error) {
+        console.error("Error al obtener los comentarios:", error);
+        throw new Error("Error al obtener los comentarios");
+    }
+}
+
 export const createUser = async (name, email, password, role) => {
     const existingUser = await prisma.user.findUnique({ where: { email } });
 

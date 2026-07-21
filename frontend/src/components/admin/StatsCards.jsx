@@ -1,5 +1,69 @@
-const StatsCards = ({ stats }) => {
-    if (!stats) return <div className="text-on-surface-variant">Cargando estadísticas...</div>;
+import { useEffect, useState } from "react";
+import { getAdminStats } from "../../services/admin.service";
+
+const StatsCards = () => {
+    const [stats, setStats] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    const loadStatsData = async () => {
+        try {
+            setIsLoading(true);
+            const statsData = await getAdminStats();
+            setStats(statsData.data);
+            setError(null);
+        } catch (err) {
+            setError(err.response?.data?.error?.message || "Error al cargar el panel");
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        loadStatsData();
+    }, []);
+
+    if (isLoading) {
+        return (
+            <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+                <div className="bg-surface-container-lowest p-6 rounded-xl shadow-sm flex flex-col gap-2">
+                    <div className="flex justify-between items-start">
+                        <span className="text-on-surface-variant font-medium label-md">Usuarios</span>
+                        <span className="material-symbols-outlined text-primary" data-icon="people">people</span>
+                    </div>
+                    <div className="text-[36px] font-bold leading-tight">Cargando...</div>
+                </div>
+                <div className="bg-surface-container-lowest p-6 rounded-xl shadow-sm flex flex-col gap-2">
+                    <div className="flex justify-between items-start">
+                        <span className="text-on-surface-variant font-medium label-md">Posts</span>
+                        <span className="material-symbols-outlined text-primary" data-icon="description">description</span>
+                    </div>
+                    <div className="text-[36px] font-bold leading-tight">Cargando...</div>
+                </div>
+                <div className="bg-surface-container-lowest p-6 rounded-xl shadow-sm flex flex-col gap-2">
+                    <div className="flex justify-between items-start">
+                        <span className="text-on-surface-variant font-medium label-md">Comentarios</span>
+                        <span className="material-symbols-outlined text-primary" data-icon="chat">chat</span>
+                    </div>
+                    <div className="text-[36px] font-bold leading-tight">Cargando...</div>
+                </div>
+            </section>
+        );
+    }
+
+    if (error) {
+        return (
+            <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+                <div className="bg-surface-container-lowest p-6 rounded-xl shadow-sm flex flex-col gap-2">
+                    <div className="flex justify-between items-start">
+                        <span className="text-on-surface-variant font-medium label-md">Usuarios</span>
+                        <span className="material-symbols-outlined text-primary" data-icon="people">people</span>
+                    </div>
+                    <div className="text-[36px] font-bold leading-tight text-error">{error}</div>
+                </div>
+            </section>
+        );
+    }
 
     return (
         <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">

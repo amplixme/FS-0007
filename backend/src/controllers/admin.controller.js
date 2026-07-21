@@ -1,4 +1,4 @@
-import { createUser, deleteComment, deletePost, deleteUser, getStats, getUsers, updateUser, updateUserRole } from "../services/admin.service.js";
+import { createUser, deleteComment, deletePost, deleteUser, getAdminComment, getStats, getUsers, updateUser, updateUserRole } from "../services/admin.service.js";
 import { success } from "../utils/response.js";
 
 // GET
@@ -15,6 +15,16 @@ export const getUsersController = async (req, res, next) => {
     try {
         const users = await getUsers();
         success(res, users, 200);
+    } catch (err) {
+        next(err);
+    }
+}
+
+export const getAdminController = async (req, res, next) => {
+    try {
+        const { page, limit } = req.query;
+        const comments = await getAdminComment({ page, limit });
+        success(res, comments, 200);
     } catch (err) {
         next(err);
     }

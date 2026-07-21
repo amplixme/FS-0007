@@ -1,11 +1,90 @@
 import { formatDistanceToNow } from "date-fns";
 import { es } from "date-fns/locale";
+import { useEffect, useState } from "react";
+import { getPosts } from "../../services/post.service";
+import { deleteAdminPost } from "../../services/admin.service";
+import ConfirmModal from "../common/ConfirmModal";
+import Pagination from "../common/Pagination";
 
-const PostsCard = ({ posts }) => {
-    if (!posts || posts.length === 0) return <div className="text-on-surface-variant">No hay publicaciones recientes.</div>;
-    console.log(posts);
-    const eliminarpost = (id) => {
-        console.log(`Eliminar post con ID: ${id}`);
+const PostsCard = () => {
+    const [posts, setPosts] = useState([]);
+    const [page, setPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [postIdToDelete, setPostIdToDelete] = useState(null);
+    const [toast, setToast] = useState({
+        show: false, message: "", type: "success",
+    });
+
+    const loadPostsData = async (currPage = 1) => {
+        try {
+            setIsLoading(true);
+            const postsData = await getPosts({ page: currPage, limit: 10, sort: "desc" });
+            setPosts(postsData.data);
+            setTotalPages(postsData.totalPages);
+            setError(null);
+        } catch (err) {
+            console.error(err);
+            setError(err.response?.data?.error?.message || "Error al cargar el panel");
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        loadPostsData(page);
+    }, [page]);
+
+    useEffect(() => {
+        if (!toast.show) return;
+        const timer = setTimeout(() => {
+            setToast((prev) => ({ ...prev, show: false }));
+        }, 15000);
+        return () => clearTimeout(timer);
+    }, [toast.show]);
+
+    const eliminarpost = async () => {
+        try {
+            setIsModalOpen(false);
+            await deleteAdminPost(postIdToDelete);
+            setToast({
+                show: true,
+                message: "¡Publicación eliminada con éxito!",
+                type: "success",
+            });
+        } catch (err) {
+            setToast({
+                show: true,
+                message: err.message || "Hubo un error al intentar eliminar el post",
+                type: "error",
+            });
+        }
+        loadPostsData(page);
+    }
+
+    const openModal = (postId) => {
+        setPostIdToDelete(postId);
+        setIsModalOpen(true);
+    }
+
+    if (isLoading) {
+        return (
+            <main className="pt-24 pb-16 px-8 max-w-7xl mx-auto w-full">
+                <p className="text-on-surface-variant">Cargando publicaciones...</p>
+            </main>
+        );
+    }
+
+    if (error) {
+        return (
+            <main className="pt-24 pb-16 px-8 max-w-7xl mx-auto w-full">
+                <p className="text-error font-medium">{error}</p>
+            </main>
+        );
     }
 
     return (
@@ -26,7 +105,7 @@ const PostsCard = ({ posts }) => {
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-surface-container-low">
-                        {posts.data.map((p) => (
+                        {posts.map((p) => (
                             <tr key={p.id}>
                                 <td className="px-6 py-4">
                                     <div className="flex items-center gap-3">
@@ -55,7 +134,7 @@ const PostsCard = ({ posts }) => {
                                 <td className="px-6 py-4 text-right">
                                     <button
                                         className="text-error hover:bg-error-container/20 p-2 rounded-full transition-colors inline-flex align-middle"
-                                        onClick={() => eliminarpost(p.id)}>
+                                        onClick={() => openModal(p.id)}>
                                         <span className="material-symbols-outlined" data-icon="delete">delete</span>
                                     </button>
                                 </td>
@@ -64,7 +143,37 @@ const PostsCard = ({ posts }) => {
                     </tbody>
                 </table>
             </div>
-        </section>
+            <div className="p-4">
+                <Pagination
+                    page={page}
+                    totalPages={totalPages}
+                    onPageChange={setPage}
+                />
+            </div>
+            {toast.show && (
+                <div
+                    className={`fixed top-6 right-6 z-50 flex items-center gap-3 rounded-xl px-4 py-3 shadow-lg ring-1 ring-black/5 animate-in fade-in slide-in-from-top-2 duration-300 ${toast.type === "success"
+                        ? "bg-emerald-50 text-emerald-800"
+                        : "bg-red-50 text-red-800"
+                        }`}
+                >
+                    <span
+                        className={`flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full text-xs text-white ${toast.type === "success" ? "bg-emerald-600" : "bg-red-600"
+                            }`}
+                    >
+                        {toast.type === "success" ? "✓" : "✕"}
+                    </span>
+                    <p className="text-sm font-medium">{toast.message}</p>
+                </div>
+            )}
+            <ConfirmModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                onConfirm={eliminarpost}
+                title="¿Estás seguro de que deseas eliminar este artículo?"
+                message="Esta acción no se puede deshacer y eliminará el post permanentemente."
+            />
+        </section >
     )
 }
 

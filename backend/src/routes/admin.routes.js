@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createUserController, deleteCommentController, deletePostController, deleteUserController, getStatsController, getUsersController, updateUserController, updateUserRoleController } from "../controllers/admin.controller.js";
+import { createUserController, deleteCommentController, deletePostController, deleteUserController, getAdminController, getStatsController, getUsersController, updateUserController, updateUserRoleController } from "../controllers/admin.controller.js";
 import { validate } from "../middlewares/validate.middleware.js";
 import { createUserSchema, updateUserSchema } from "../validation/user.schema.js";
 import { authMiddleware } from "../middlewares/auth.middleware.js";
@@ -11,6 +11,7 @@ router.use(authMiddleware, requireRole("ADMIN"));
 // GET
 router.get("/stats", getStatsController);
 router.get("/users", getUsersController);
+router.get("/comments", getAdminController);
 
 // POST
 router.post("/users", validate(createUserSchema), createUserController);

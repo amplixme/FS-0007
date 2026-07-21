@@ -16,7 +16,7 @@ export default function PostForm({
   const [validationError, setValidationError] = useState("");
 
 
-  const [availableCategories, setAvailableCategories] = useState([]); 
+  const [availableCategories, setAvailableCategories] = useState([]);
   const [selectedCategoryIds, setSelectedCategoryIds] = useState(() => {
 
     if (initialPost?.categories) {
@@ -24,8 +24,8 @@ export default function PostForm({
     }
     return [];
   });
- 
- 
+
+
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -43,11 +43,11 @@ export default function PostForm({
   const handleCategoryChange = (categoryId) => {
     setSelectedCategoryIds((prevIds) =>
       prevIds.includes(categoryId)
-        ? prevIds.filter((id) => id !== categoryId) 
-        : [...prevIds, categoryId] 
+        ? prevIds.filter((id) => id !== categoryId)
+        : [...prevIds, categoryId]
     );
   };
-  
+
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -90,7 +90,7 @@ export default function PostForm({
       </article>
 
 
-      {}
+      { }
       <section className="mb-8 p-6 bg-surface-container-low rounded-xl border border-outline-variant/15">
         <h4 className="font-bold text-on-surface mb-2">Categorías</h4>
         <p className="text-sm text-on-surface-variant mb-4">
@@ -104,13 +104,12 @@ export default function PostForm({
             {availableCategories.map((category) => {
               const isChecked = selectedCategoryIds.includes(category.id);
               return (
-                <label 
-                  key={category.id} 
-                  className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer select-none transition-all duration-200 ${
-                    isChecked 
-                      ? "border-primary bg-primary/5 text-primary" 
+                <label
+                  key={category.id}
+                  className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer select-none transition-all duration-200 ${isChecked
+                      ? "border-primary bg-primary/5 text-primary"
                       : "border-outline-variant/30 hover:bg-surface-container-high text-on-surface"
-                  }`}
+                    }`}
                 >
                   <input
                     type="checkbox"
@@ -124,7 +123,7 @@ export default function PostForm({
             })}
           </div>
         )}
-      </section>       
+      </section>
 
 
 

@@ -6,6 +6,7 @@ export const create = async (
   content,
   authorId,
   published,
+  categoryIds,
   coverImage,
 ) => {
   const newPost = await prisma.post.create({
@@ -14,6 +15,9 @@ export const create = async (
       content,
       authorId: Number(authorId),
       published: Boolean(published),
+      categories: categoryIds?.length
+        ? { connect: categoryIds.map((id) => ({ id })) }
+        : undefined,
       coverImage: coverImage || null,
     },
     include: {

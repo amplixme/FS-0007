@@ -29,7 +29,7 @@ function App() {
               <Route path="/posts/:id" element={<PostDetail />} />
               <Route path="/categorias" element={<ProtectedRoute>  <CategoriesAdmin />  </ProtectedRoute>} />
               <Route path="/profile/:id" element={<ProfilePublic />} />
-              <Route path="/profile/editar" element={<ProtectedRoute> <ProfileEdit /> </ProtectedRoute>} />
+              <Route path="/profile/editar" element={ <ProtectedRoute> <ProfileEdit /> </ProtectedRoute> }/>
               <Route path="*" element={<NotFound />} />
               <Route
                 path="/admin"

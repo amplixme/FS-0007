@@ -1,6 +1,6 @@
 import Profile from "../components/Profile"
 import { useProfile } from '../hooks/useProfile.js'
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import EmptyState from "../components/common/EmptyState.jsx";
 import Spinner from "../components/common/Spinner.jsx";
 import ErrorMessage from "../components/common/ErrorMessage.jsx";
@@ -11,6 +11,7 @@ const ProfilePublic = () => {
   const { id } = useParams()
   const { profile, isLoading, error, loadProfile } = useProfile(id)
   const { posts, isLoadingPost, errorPost, reloadPost } = usePosts({authorId:id})
+  const navigate = useNavigate()
   return (
     <main className="pt-5 pb-20 px-6 max-w-7xl mx-auto">
       {/* <!-- Profile Card Header --> */}
@@ -21,7 +22,7 @@ const ProfilePublic = () => {
       )}
 
       {!isLoading && !error && profile && (
-        <Profile profile={profile} onClickEdit={() => { console.log('editando') }} />
+        <Profile profile={profile} onClickEdit={() => { navigate("/profile/editar")}} />
       )}
       {/* <!-- Tabs Navigation --> */}
       <section

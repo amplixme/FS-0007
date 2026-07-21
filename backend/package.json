@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "node --watch app.js",
     "start": "node app.js",
-    "setup": "npm install && npx prisma migrate dev && npx prisma generate && npm run dev"
+    "setup": "npm install && npx prisma migrate dev && npx prisma generate && npm run dev",
+    "seed": "npx tsx prisma/seed.js"
   },
   "keywords": [],
   "author": "",

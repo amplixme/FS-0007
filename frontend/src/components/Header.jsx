@@ -32,7 +32,15 @@ function Header() {
         <nav className={`navigation ${isMenuOpen ? "navigation-open" : ""}`}>
           {isAuthenticated ? (
             <>
+              {user.role == "ADMIN" && (
+                <NavLink to="/admin" onClick={closeMenu}>
+                  Panel de Administración
+                </NavLink>
+              )}
               <span>{user.name}</span>
+              <NavLink to="/crear" onClick={closeMenu}>
+                Crear Post
+              </NavLink>
 
               <button onClick={logout}>
                 Logout

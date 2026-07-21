@@ -36,9 +36,9 @@ export default function PostCard({ post, onClickCat }) {
               key={crypto.randomUUID()}
               className="px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-700 hover:bg-blue-200"
               onClick={(e) => {
-                  e.stopPropagation()
-                  onClickCat(category.slug)
-                }
+                e.stopPropagation()
+                onClickCat(category.slug)
+              }
               }
             >
               {category.name}
@@ -60,19 +60,19 @@ export default function PostCard({ post, onClickCat }) {
             <div className="w-8 h-8 rounded-full bg-secondary-fixed overflow-hidden">
               <img alt="Author" className="w-full h-full object-cover"
                 data-alt="friendly woman with artistic style smiling, bright studio portrait with warm tones"
-                src={post.author?.avatarUrl 
-                      ? post.author?.avatarUrl
-                      : "https://cdn.pixabay.com/photo/2023/02/18/11/00/icon-7797704_640.png"
-                    }
+                src={post.author?.avatarUrl
+                  ? post.author?.avatarUrl
+                  : "https://cdn.pixabay.com/photo/2023/02/18/11/00/icon-7797704_640.png"
+                }
               />
             </div>
             <div>
               <p
                 className="text-xs font-bold"
                 onClick={(e) => {
-                    e.stopPropagation()
-                    navigate(`/profile/${post.authorId}`)
-                  }
+                  e.stopPropagation()
+                  navigate(`/profile/${post.authorId}`)
+                }
                 }
               >
                 {post.author?.name || "Autor desconocido"}

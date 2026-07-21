@@ -3,8 +3,6 @@ export default function Pagination({ page, totalPages, onPageChange }) {
     return null;
   }
 
-  const pages = Array.from({ length: totalPages }, (_, index) => index + 1);
-
   const handlePrevious = () => {
     if (page > 1) {
       onPageChange(page - 1);
@@ -16,6 +14,34 @@ export default function Pagination({ page, totalPages, onPageChange }) {
       onPageChange(page + 1);
     }
   };
+
+  const getPageNumbers = () => {
+    const delta = 2; // páginas a cada lado de la actual
+    const range = [];
+    const rangeWithDots = [];
+    let lastAdded = null;
+
+    for (let i = 1; i <= totalPages; i++) {
+      const isEdge = i === 1 || i === totalPages;
+      const isInRange = i >= page - delta && i <= page + delta;
+
+      if (isEdge || isInRange) {
+        range.push(i);
+      }
+    }
+
+    for (const i of range) {
+      if (lastAdded !== null && i - lastAdded > 1) {
+        rangeWithDots.push("...");
+      }
+      rangeWithDots.push(i);
+      lastAdded = i;
+    }
+
+    return rangeWithDots;
+  };
+
+  const pages = getPageNumbers();
 
   return (
     <nav
@@ -31,21 +57,29 @@ export default function Pagination({ page, totalPages, onPageChange }) {
         Anterior
       </button>
 
-      {pages.map((pageNumber) => (
-        <button
-          key={pageNumber}
-          type="button"
-          onClick={() => onPageChange(pageNumber)}
-          aria-current={pageNumber === page ? "page" : undefined}
-          className={`rounded-md border px-3 py-2 text-sm font-medium transition ${
-            pageNumber === page
+      {pages.map((pageNumber, index) =>
+        pageNumber === "..." ? (
+          <span
+            key={`dots-${index}`}
+            className="px-2 text-sm font-medium text-slate-400"
+          >
+            ...
+          </span>
+        ) : (
+          <button
+            key={pageNumber}
+            type="button"
+            onClick={() => onPageChange(pageNumber)}
+            aria-current={pageNumber === page ? "page" : undefined}
+            className={`rounded-md border px-3 py-2 text-sm font-medium transition ${pageNumber === page
               ? "border-blue-600 bg-blue-600 text-white"
               : "border-slate-300 text-slate-700 hover:bg-slate-100"
-          }`}
-        >
-          {pageNumber}
-        </button>
-      ))}
+              }`}
+          >
+            {pageNumber}
+          </button>
+        )
+      )}
 
       <button
         type="button"

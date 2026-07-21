@@ -1,4 +1,5 @@
 import { Router } from "express";
+import adminRoutes from "./admin.routes.js";
 import authRoutes from "./auth.routes.js";
 import postRoutes from "./post.routes.js";
 import uploadRoutes from "./upload.routes.js";
@@ -9,6 +10,8 @@ import userRoutes from "./user.routes.js";
 import { errorHandler } from "../middlewares/error.middleware.js";
 
 const router = Router();
+
+router.use("/admin", adminRoutes);
 
 router.use("/auth", authRoutes);
 router.use("/posts", postRoutes);

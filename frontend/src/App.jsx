@@ -11,6 +11,9 @@ import CategoriesAdmin from "./pages/CategoriesAdmin";
 import NotFound from "./pages/NotFound";
 import ErrorBoundary from "./components/common/ErrorBoundary";
 import ProfilePublic from "./pages/ProfilePublic";
+import ProtectedAdminRoute from "./components/ProtectedAminRoute";
+import AdminPage from "./components/admin/AdminPage";
+
 import ProfileEdit from "./pages/ProfileEdit";
 function App() {
   return (
@@ -28,6 +31,17 @@ function App() {
               <Route path="/profile/:id" element={ <ProfilePublic />}/>
               <Route path="/profile/editar" element={ <ProtectedRoute> <ProfileEdit /> </ProtectedRoute> }/>
               <Route path="*" element={<NotFound />} />
+              <Route
+                path="/admin"
+                element={
+                  <ProtectedRoute>
+                    <ProtectedAdminRoute>
+                      <AdminPage />
+                    </ProtectedAdminRoute>
+                  </ProtectedRoute>
+                }
+              />
+              <Route path="/profile/:id" element={<ProfilePublic />} />
             </Routes>
           </Layout>
         </AuthProvider>

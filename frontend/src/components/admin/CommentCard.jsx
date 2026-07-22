@@ -20,7 +20,7 @@ const CommentCards = () => {
     const loadCommentData = async (currPage = 1) => {
         try {
             setIsLoading(true);
-            const commentData = await getAdminComment({ page: currPage, limit: 10 });
+            const commentData = await getAdminComment({ page: currPage, limit: 5 });
             setComentarios(commentData.data.data);
             setTotalPages(commentData.data.totalPages);
 

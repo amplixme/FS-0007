@@ -1,20 +1,22 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Layout from "./components/Layout";
-import Home from "./pages/Home";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
+import ErrorBoundary from "./components/common/ErrorBoundary";
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
-import CreatePost from "./pages/CreatePost";
-import PostDetail from "./pages/PostDetail";
-import CategoriesAdmin from "./pages/CategoriesAdmin";
-import NotFound from "./pages/NotFound";
-import ErrorBoundary from "./components/common/ErrorBoundary";
-import ProfilePublic from "./pages/ProfilePublic";
 import ProtectedAdminRoute from "./components/ProtectedAminRoute";
-import AdminPage from "./components/admin/AdminPage";
+import React, { Suspense } from "react";
 
-import ProfileEdit from "./pages/ProfileEdit";
+const AdminPage = React.lazy(() => import("./components/admin/AdminPage"));
+const Home = React.lazy(() => import("./pages/Home"));
+const Login = React.lazy(() => import("./pages/Login"));
+const Register = React.lazy(() => import("./pages/Register"));
+const CreatePost = React.lazy(() => import("./pages/CreatePost"));
+const PostDetail = React.lazy(() => import("./pages/PostDetail"));
+const CategoriesAdmin = React.lazy(() => import("./pages/CategoriesAdmin"));
+const ProfilePublic = React.lazy(() => import("./pages/ProfilePublic"));
+const ProfileEdit = React.lazy(() => import("./pages/ProfileEdit"));
+const NotFound = React.lazy(() => import("./pages/NotFound"));
+
 function App() {
   return (
     <ErrorBoundary>
@@ -26,32 +28,11 @@ function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
-                <Route
-                  path="/crear"
-                  element={
-                    <ProtectedRoute>
-                      <CreatePost />
-                    </ProtectedRoute>
-                  }
-                />
+                <Route path="/crear" element={<ProtectedRoute><CreatePost /></ProtectedRoute>} />
                 <Route path="/posts/:id" element={<PostDetail />} />
-                <Route
-                  path="/categorias"
-                  element={
-                    <ProtectedRoute>
-                      <CategoriesAdmin />
-                    </ProtectedRoute>
-                  }
-                />
+                <Route path="/categorias" element={<ProtectedRoute><CategoriesAdmin /></ProtectedRoute>} />
                 <Route path="/profile/:id" element={<ProfilePublic />} />
-                <Route
-                  path="/profile/editar"
-                  element={
-                    <ProtectedRoute>
-                      <ProfileEdit />
-                    </ProtectedRoute>
-                  }
-                />
+                <Route path="/profile/editar" element={<ProtectedRoute><ProfileEdit /></ProtectedRoute>} />
                 <Route
                   path="/admin"
                   element={

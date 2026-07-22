@@ -31,7 +31,7 @@ export default function CategoryFilter({ activeSlug, onChange }) {
             {/* Desktop: sidebar lateral */}
             <div className="hidden md:block mt-4">
                 <div className="flex items-center justify-between px-4 mb-4">
-                    <h3 className="text-xs font-black uppercase tracking-[0.1em] text-on-surface-variant/70">
+                    <h3 className="text-xs font-black uppercase tracking-[0.1em] text-slate-700">
                         Categorías
                     </h3>
                 </div>

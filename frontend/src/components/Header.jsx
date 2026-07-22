@@ -1,5 +1,5 @@
 import { Link, NavLink } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 
 function Header() {
@@ -9,6 +9,22 @@ function Header() {
   const closeMenu = () => {
     setIsMenuOpen(false);
   };
+
+  useEffect(() => {
+    if (!isMenuOpen) return;
+
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") {
+        closeMenu();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isMenuOpen]);
 
   return (
     <header className="site-header">
@@ -20,29 +36,36 @@ function Header() {
         <button
           type="button"
           className="menu-button"
-          aria-label="Abrir menú de navegación"
+          aria-label={isMenuOpen ? "Cerrar menú de navegación" : "Abrir menú de navegación"}
           aria-expanded={isMenuOpen}
+          aria-controls="main-navigation"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
         >
-          <span />
-          <span />
-          <span />
+          <span aria-hidden="true" />
+          <span aria-hidden="true" />
+          <span aria-hidden="true" />
         </button>
 
-        <nav className={`navigation ${isMenuOpen ? "navigation-open" : ""}`}>
+        <nav
+          id="main-navigation"
+          className={`navigation ${isMenuOpen ? "navigation-open" : ""}`}
+          aria-label="Navegación principal"
+        >
           {isAuthenticated ? (
             <>
-              {user.role == "ADMIN" && (
+              {user.role === "ADMIN" && (
                 <NavLink to="/admin" onClick={closeMenu}>
                   Panel de Administración
                 </NavLink>
               )}
+
               <span>{user.name}</span>
+
               <NavLink to="/crear" onClick={closeMenu}>
                 Crear Post
               </NavLink>
 
-              <button onClick={logout}>
+              <button type="button" onClick={logout}>
                 Logout
               </button>
             </>

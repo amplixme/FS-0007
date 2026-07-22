@@ -18,13 +18,14 @@ export default function ImageUpload({ onUpload }) {
         },
         onUploadProgress: (progressEvent) => {
           const percent = Math.round(
-            (progressEvent.loaded * 100) / progressEvent.total
+            (progressEvent.loaded * 100) / progressEvent.total,
           );
 
           setProgress(percent);
         },
       });
-      onUpload(response.data.url)
+
+      onUpload(response.data.url);
 
       return response.data;
     } catch (error) {
@@ -34,28 +35,28 @@ export default function ImageUpload({ onUpload }) {
     }
   };
 
-  const onDrop = useCallback(async (acceptedFiles) => {
-    const file = acceptedFiles[0];
+  const onDrop = useCallback(
+    async (acceptedFiles) => {
+      const file = acceptedFiles[0];
 
-    if (!file) return;
+      if (!file) return;
 
-    // Elimina la preview anterior si existe
-    if (preview?.url) {
-      URL.revokeObjectURL(preview.url);
-    }
+      if (preview?.url) {
+        URL.revokeObjectURL(preview.url);
+      }
 
-    setPreview({
-      file,
-      url: URL.createObjectURL(file),
-    });
+      setPreview({
+        file,
+        url: URL.createObjectURL(file),
+      });
 
-    // Simulación de subida
-    setProgress(0);
-    setIsUploading(true);
+      setProgress(0);
+      setIsUploading(true);
 
-    await uploadImage(file);
-
-  }, [preview]);
+      await uploadImage(file);
+    },
+    [preview],
+  );
 
   const {
     getRootProps,
@@ -70,7 +71,7 @@ export default function ImageUpload({ onUpload }) {
       "image/webp": [],
     },
     maxFiles: 1,
-    maxSize: 5 * 1024 * 1024, // 5 MB
+    maxSize: 5 * 1024 * 1024,
   });
 
   useEffect(() => {
@@ -81,8 +82,8 @@ export default function ImageUpload({ onUpload }) {
     };
   }, [preview]);
 
-  const removeImage = (e) => {
-    e.stopPropagation();
+  const removeImage = (event) => {
+    event.stopPropagation();
 
     if (preview?.url) {
       URL.revokeObjectURL(preview.url);
@@ -94,30 +95,34 @@ export default function ImageUpload({ onUpload }) {
   };
 
   return (
-    <div className="w-full max-w-md mx-auto">
+    <div className="mx-auto w-full max-w-md">
       <div
         {...getRootProps()}
         className={`
           relative
-          flex flex-col items-center justify-center
-          w-full h-72
-          border-2 border-dashed rounded-xl
+          flex h-72 w-full flex-col items-center justify-center
+          overflow-hidden rounded-xl border-2 border-dashed
           cursor-pointer
-          overflow-hidden
           transition-all
-          ${isDragActive
-            ? "border-blue-500 bg-blue-50"
-            : "border-gray-300 hover:border-blue-400"
+          focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2
+          ${
+            isDragActive
+              ? "border-blue-500 bg-blue-50"
+              : "border-gray-300 hover:border-blue-400"
           }
         `}
       >
-        <input {...getInputProps()} />
+        <input
+          {...getInputProps({
+            "aria-label": "Seleccionar imagen de portada",
+          })}
+        />
 
         {preview ? (
           <>
             <img
               src={preview.url}
-              alt="Preview"
+              alt={`Vista previa de ${preview.file.name}`}
               className="max-h-48 object-contain"
             />
 
@@ -125,47 +130,44 @@ export default function ImageUpload({ onUpload }) {
               type="button"
               onClick={removeImage}
               className="
-                absolute
-                top-3
-                right-3
-                w-8
-                h-8
-                rounded-full
-                bg-red-500
-                text-white
-                hover:bg-red-600
-                flex
-                items-center
-                justify-center
-                transition
+                absolute right-3 top-3
+                flex h-8 w-8 items-center justify-center
+                rounded-full bg-red-700 text-white
+                transition hover:bg-red-800
+                focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2
               "
+              aria-label="Quitar imagen seleccionada"
             >
               ✕
             </button>
 
-            <div className="w-11/12 mt-5">
-              <div className="h-3 bg-gray-200 rounded-full overflow-hidden">
+            <div className="mt-5 w-11/12">
+              <div className="h-3 overflow-hidden rounded-full bg-gray-200">
                 <div
-                  className="h-full bg-blue-500 transition-all duration-150"
+                  className="h-full bg-blue-600 transition-all duration-150"
                   style={{ width: `${progress}%` }}
+                  role="progressbar"
+                  aria-valuenow={progress}
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                  aria-label="Progreso de carga de imagen"
                 />
               </div>
 
-              <p className="text-sm text-center mt-2 text-gray-700">
-                {isUploading
-                  ? `Subiendo... ${progress}%`
-                  : "Carga completada"}
+              <p className="mt-2 text-center text-sm text-gray-700" aria-live="polite">
+                {isUploading ? `Subiendo... ${progress}%` : "Carga completada"}
               </p>
             </div>
           </>
         ) : (
           <>
             <svg
-              className="w-14 h-14 text-gray-400 mb-4"
+              className="mb-4 h-14 w-14 text-gray-500"
               fill="none"
               stroke="currentColor"
               strokeWidth="1.5"
               viewBox="0 0 24 24"
+              aria-hidden="true"
             >
               <path
                 strokeLinecap="round"
@@ -175,7 +177,7 @@ export default function ImageUpload({ onUpload }) {
             </svg>
 
             {isDragActive ? (
-              <p className="text-blue-600 font-medium">
+              <p className="font-medium text-blue-700">
                 Soltá la imagen aquí...
               </p>
             ) : (
@@ -184,11 +186,11 @@ export default function ImageUpload({ onUpload }) {
                   Arrastrá una imagen aquí
                 </p>
 
-                <p className="text-gray-500 text-sm mt-2">
+                <p className="mt-2 text-sm text-gray-600">
                   o hacé click para seleccionarla
                 </p>
 
-                <p className="text-xs text-gray-400 mt-4">
+                <p className="mt-4 text-xs text-gray-600">
                   PNG · JPG · JPEG · WEBP
                 </p>
               </>
@@ -198,7 +200,7 @@ export default function ImageUpload({ onUpload }) {
       </div>
 
       {fileRejections.length > 0 && (
-        <p className="mt-3 text-center text-red-500 text-sm">
+        <p className="mt-3 text-center text-sm text-red-700" role="alert">
           Solo se permiten imágenes.
         </p>
       )}

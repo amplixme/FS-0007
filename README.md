@@ -66,4 +66,7 @@ Notas adicionales
 -----------------
 - Asegúrate de que la base de datos está en funcionamiento antes de ejecutar las migraciones.
 - Si nunca has usado estas tecnologías, usa un editor de texto para editar el archivo `.env` y verifica que las rutas y puertos coincidan con tu configuración local.
+---
 
+## Url publica de backend
+- https://fs-0007.onrender.com/

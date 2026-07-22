@@ -1,9 +1,14 @@
-import { createComment, getCommentsByPost, updateComment, deleteComment } from "../services/comment.service.js";
+import {
+  createComment,
+  getCommentsByPost,
+  updateComment,
+  deleteComment,
+} from "../services/comment.service.js";
 import { success } from "../utils/response.js";
 
 export const createCommentController = async (req, res, next) => {
   try {
-    console.log("req.user:", req.user)
+    console.log("req.user:", req.user);
     const { postId } = req.params;
     const { content } = req.body;
     const authorId = req.user.userId;

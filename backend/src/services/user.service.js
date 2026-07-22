@@ -33,7 +33,7 @@ export const getPublicProfile = async (userId) => {
       id,
     },
     select: {
-      id:true,
+      id: true,
       name: true,
       bio: true,
       createdAt: true,
@@ -45,7 +45,7 @@ export const getPublicProfile = async (userId) => {
       },
     },
   });
-  return user
+  return user;
 };
 
 export const updateProfile = async (userId, name, bio, avatarUrl) => {
@@ -53,7 +53,7 @@ export const updateProfile = async (userId, name, bio, avatarUrl) => {
 
   return await prisma.user.update({
     where: {
-      id:userId,
+      id: userId,
     },
     data: {
       name,

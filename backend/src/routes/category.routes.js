@@ -12,27 +12,12 @@ import { requireRole } from "../middlewares/role.middleware.js";
 
 const router = Router();
 
-router.post(
-  "/",
-  authMiddleware,
-  requireRole("ADMIN"),
-  createCategoryController,
-);
+router.post("/", authMiddleware, requireRole("ADMIN"), createCategoryController);
 
 router.get("/", getCategoriesController);
 
-router.put(
-  "/:id",
-  authMiddleware,
-  requireRole("ADMIN"),
-  updateCategoryController,
-);
+router.put("/:id", authMiddleware, requireRole("ADMIN"), updateCategoryController);
 
-router.delete(
-  "/:id",
-  authMiddleware,
-  requireRole("ADMIN"),
-  deleteCategoryController,
-);
+router.delete("/:id", authMiddleware, requireRole("ADMIN"), deleteCategoryController);
 
 export default router;

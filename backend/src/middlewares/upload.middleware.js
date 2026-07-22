@@ -8,10 +8,7 @@ const storage = multer.memoryStorage();
 const fileFilter = (req, file, callback) => {
   if (!allowedMimeTypes.includes(file.mimetype)) {
     return callback(
-      new CustomError(
-        400,
-        "Formato de imagen no permitido. Solo se aceptan JPG, PNG y WEBP."
-      )
+      new CustomError(400, "Formato de imagen no permitido. Solo se aceptan JPG, PNG y WEBP.")
     );
   }
 

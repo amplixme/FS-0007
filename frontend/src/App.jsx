@@ -21,33 +21,54 @@ function App() {
       <BrowserRouter>
         <AuthProvider>
           <Layout>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              <Route path="/crear" element={<ProtectedRoute><CreatePost /></ProtectedRoute>} />
-              <Route path="/posts/:id" element={<PostDetail />} />
-              <Route path="/categorias" element={<ProtectedRoute>  <CategoriesAdmin />  </ProtectedRoute>} />
-              <Route path="/profile/:id" element={<ProfilePublic />} />
-              <Route path="/profile/editar" element={ <ProtectedRoute> <ProfileEdit /> </ProtectedRoute> }/>
-              <Route path="*" element={<NotFound />} />
-              <Route
-                path="/admin"
-                element={
-                  <ProtectedRoute>
-                    <ProtectedAdminRoute>
-                      <AdminPage />
-                    </ProtectedAdminRoute>
-                  </ProtectedRoute>
-                }
-              />
-              <Route path="/profile/:id" element={<ProfilePublic />} />
-            </Routes>
+            <Suspense fallback={<div>Cargando...</div>}>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
+                <Route
+                  path="/crear"
+                  element={
+                    <ProtectedRoute>
+                      <CreatePost />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route path="/posts/:id" element={<PostDetail />} />
+                <Route
+                  path="/categorias"
+                  element={
+                    <ProtectedRoute>
+                      <CategoriesAdmin />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route path="/profile/:id" element={<ProfilePublic />} />
+                <Route
+                  path="/profile/editar"
+                  element={
+                    <ProtectedRoute>
+                      <ProfileEdit />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/admin"
+                  element={
+                    <ProtectedRoute>
+                      <ProtectedAdminRoute>
+                        <AdminPage />
+                      </ProtectedAdminRoute>
+                    </ProtectedRoute>
+                  }
+                />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </Suspense>
           </Layout>
         </AuthProvider>
       </BrowserRouter>
     </ErrorBoundary>
   );
 }
-
 export default App;

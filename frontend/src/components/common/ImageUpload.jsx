@@ -17,9 +17,7 @@ export default function ImageUpload({ onUpload }) {
           "Content-Type": "multipart/form-data",
         },
         onUploadProgress: (progressEvent) => {
-          const percent = Math.round(
-            (progressEvent.loaded * 100) / progressEvent.total,
-          );
+          const percent = Math.round((progressEvent.loaded * 100) / progressEvent.total);
 
           setProgress(percent);
         },
@@ -55,15 +53,10 @@ export default function ImageUpload({ onUpload }) {
 
       await uploadImage(file);
     },
-    [preview],
+    [preview]
   );
 
-  const {
-    getRootProps,
-    getInputProps,
-    isDragActive,
-    fileRejections,
-  } = useDropzone({
+  const { getRootProps, getInputProps, isDragActive, fileRejections } = useDropzone({
     onDrop,
     accept: {
       "image/jpeg": [],
@@ -105,11 +98,7 @@ export default function ImageUpload({ onUpload }) {
           cursor-pointer
           transition-all
           focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2
-          ${
-            isDragActive
-              ? "border-blue-500 bg-blue-50"
-              : "border-gray-300 hover:border-blue-400"
-          }
+          ${isDragActive ? "border-blue-500 bg-blue-50" : "border-gray-300 hover:border-blue-400"}
         `}
       >
         <input
@@ -177,22 +166,14 @@ export default function ImageUpload({ onUpload }) {
             </svg>
 
             {isDragActive ? (
-              <p className="font-medium text-blue-700">
-                Soltá la imagen aquí...
-              </p>
+              <p className="font-medium text-blue-700">Soltá la imagen aquí...</p>
             ) : (
               <>
-                <p className="font-semibold">
-                  Arrastrá una imagen aquí
-                </p>
+                <p className="font-semibold">Arrastrá una imagen aquí</p>
 
-                <p className="mt-2 text-sm text-gray-600">
-                  o hacé click para seleccionarla
-                </p>
+                <p className="mt-2 text-sm text-gray-600">o hacé click para seleccionarla</p>
 
-                <p className="mt-4 text-xs text-gray-600">
-                  PNG · JPG · JPEG · WEBP
-                </p>
+                <p className="mt-4 text-xs text-gray-600">PNG · JPG · JPEG · WEBP</p>
               </>
             )}
           </>

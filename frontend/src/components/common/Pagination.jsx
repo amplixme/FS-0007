@@ -59,10 +59,7 @@ export default function Pagination({ page, totalPages, onPageChange }) {
 
       {pages.map((pageNumber, index) =>
         pageNumber === "..." ? (
-          <span
-            key={`dots-${index}`}
-            className="px-2 text-sm font-medium text-slate-400"
-          >
+          <span key={`dots-${index}`} className="px-2 text-sm font-medium text-slate-400">
             ...
           </span>
         ) : (
@@ -71,10 +68,11 @@ export default function Pagination({ page, totalPages, onPageChange }) {
             type="button"
             onClick={() => onPageChange(pageNumber)}
             aria-current={pageNumber === page ? "page" : undefined}
-            className={`rounded-md border px-3 py-2 text-sm font-medium transition ${pageNumber === page
-              ? "border-blue-600 bg-blue-600 text-white"
-              : "border-slate-300 text-slate-700 hover:bg-slate-100"
-              }`}
+            className={`rounded-md border px-3 py-2 text-sm font-medium transition ${
+              pageNumber === page
+                ? "border-blue-600 bg-blue-600 text-white"
+                : "border-slate-300 text-slate-700 hover:bg-slate-100"
+            }`}
           >
             {pageNumber}
           </button>

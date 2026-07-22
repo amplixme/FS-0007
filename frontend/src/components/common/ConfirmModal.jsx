@@ -45,10 +45,7 @@ const ConfirmModal = ({
           {title}
         </h2>
 
-        <p
-          id="confirm-modal-description"
-          className="mt-3 text-sm leading-relaxed text-slate-700"
-        >
+        <p id="confirm-modal-description" className="mt-3 text-sm leading-relaxed text-slate-700">
           {message}
         </p>
 

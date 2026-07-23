@@ -10,13 +10,8 @@ function Login() {
   }, []);
   return (
     <main>
-      <div className="bg-surface-container-lowest w-full min-h-screen md:min-h-fit md:rounded-[16px] ambient-shadow overflow-hidden transition-all duration-300">
-
-        <div className="h-1.5 w-full bg-gradient-to-r from-primary to-secondary-container"></div>
+      <div className="w-full max-w-[420px] mx-auto bg-white md:rounded-[16px] shadow-xl md:shadow-slate-200/50 overflow-hidden flex flex-col">
         <div className="px-8 pt-12 pb-10 md:px-10">
-          <div className="mb-10 text-center md:text-left">
-            <span className="text-2xl font-extrabold tracking-tighter text-primary">TuProyecto</span>
-          </div>
           <header className="mb-10 text-center md:text-left">
             <h1 className="text-[28px] font-bold text-on-surface leading-tight tracking-tight mb-2">
               Iniciar sesión

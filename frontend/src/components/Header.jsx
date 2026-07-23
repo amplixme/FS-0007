@@ -35,7 +35,7 @@ function Header() {
               {user.role == "ADMIN" && (
                 <NavLink to="/admin" onClick={closeMenu}>
                   Panel de Administración
-                </NavLink>
+                </NavLink> 
               )}
               <span>{user.name}</span>
               <NavLink to="/crear" onClick={closeMenu}>

@@ -11,7 +11,7 @@ export default function CategoryFilter({ activeSlug, onChange }) {
     return (
         <nav className="px-4 py-6" aria-label="Filtro de categorías">
             {/* Mobile: chips horizontales scrolleables */}
-            <div className="flex gap-2 overflow-x-auto pb-2 md:hidden -mx-4 px-4">
+            <div className="flex gap-2 overflow-x-auto pb-2 md:hidden mx-4 px-4">
                 {items.map((cat) => (
                     <button
                         key={cat.id}

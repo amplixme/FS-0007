@@ -17,7 +17,9 @@ function Register() {
       <div className="bg-slate-50 py-6 px-8 text-center border-t border-slate-100">
         <p className="text-sm text-slate-600">
           ¿Ya tienes cuenta?
-          <a className="text-[#3A6BFF] font-bold hover:underline" href="/login">Inicia sesión</a>
+          <a className="text-[#3A6BFF] font-bold hover:underline" href="/login">
+            Inicia sesión
+          </a>
         </p>
       </div>
     </main>

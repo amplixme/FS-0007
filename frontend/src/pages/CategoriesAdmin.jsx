@@ -1,23 +1,25 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
-import { 
-  getAll, 
-  createCategory, 
-  updateCategory, 
-  deleteCategory 
-} from "../services/category.service"; 
+import {
+  getAll,
+  createCategory,
+  updateCategory,
+  deleteCategory,
+} from "../services/category.service";
 import ConfirmModal from "../components/common/ConfirmModal";
 
 export default function CategoriesAdmin() {
   const [categories, setCategories] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
-  const [toast, setToast] = useState({ show: false, message: "", type: "success" });
+  const [toast, setToast] = useState({
+    show: false,
+    message: "",
+    type: "success",
+  });
 
- 
   const [newName, setNewName] = useState("");
   const [newSlug, setNewSlug] = useState("");
-
 
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editingCategory, setEditingCategory] = useState(null);
@@ -27,15 +29,14 @@ export default function CategoriesAdmin() {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [categoryToDelete, setCategoryToDelete] = useState(null);
 
-
   const generateSlug = (text) => {
     return text
       .toLowerCase()
-      .normalize("NFD") 
-      .replace(/[\u0300-\u036f]/g, "") 
-      .replace(/[^a-z0-9\s-]/g, "") 
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^a-z0-9\s-]/g, "")
       .trim()
-      .replace(/\s+/g, "-"); 
+      .replace(/\s+/g, "-");
   };
 
   const showToast = (message, type = "success") => {
@@ -46,12 +47,11 @@ export default function CategoriesAdmin() {
   const fetchCategories = async () => {
     try {
       setIsLoading(true);
-      const res = await getAll(); 
-      
-      const listaLimpia = res?.data || res; 
-      
+      const res = await getAll();
+
+      const listaLimpia = res?.data || res;
+
       setCategories(Array.isArray(listaLimpia) ? listaLimpia : []);
-      
     } catch (err) {
       setError("No se pudieron cargar las categorías.");
     } finally {
@@ -63,7 +63,6 @@ export default function CategoriesAdmin() {
     fetchCategories();
   }, []);
 
-  
   const handleNameChange = (e, target) => {
     const val = e.target.value;
     if (target === "create") {
@@ -74,7 +73,6 @@ export default function CategoriesAdmin() {
       setEditSlug(generateSlug(val));
     }
   };
-
 
   const handleCreateSubmit = async (e) => {
     e.preventDefault();
@@ -90,14 +88,12 @@ export default function CategoriesAdmin() {
     }
   };
 
-
   const openEditModal = (category) => {
     setEditingCategory(category);
     setEditName(category.name);
     setEditSlug(category.slug);
     setIsEditModalOpen(true);
   };
-
 
   const handleEditSubmit = async (e) => {
     e.preventDefault();
@@ -111,7 +107,6 @@ export default function CategoriesAdmin() {
     }
   };
 
- 
   const openDeleteModal = (category) => {
     setCategoryToDelete(category);
     setIsDeleteModalOpen(true);
@@ -130,11 +125,12 @@ export default function CategoriesAdmin() {
 
   return (
     <div className="max-w-4xl mx-auto p-4 md:p-6 relative">
-
       {toast.show && (
-        <div className={`fixed top-1/2 left-1/2 z-50 -translate-x-1/2 -translate-y-1/2 flex items-center gap-2 rounded-lg px-6 py-4 text-white shadow-2xl transition-all duration-300 ${
-          toast.type === "success" ? "bg-emerald-600" : "bg-red-600"
-        }`}>
+        <div
+          className={`fixed top-1/2 left-1/2 z-50 -translate-x-1/2 -translate-y-1/2 flex items-center gap-2 rounded-lg px-6 py-4 text-white shadow-2xl transition-all duration-300 ${
+            toast.type === "success" ? "bg-emerald-600" : "bg-red-600"
+          }`}
+        >
           <span>{toast.type === "success" ? "✅" : "❌"}</span>
           <p className="font-semibold whitespace-nowrap">{toast.message}</p>
         </div>
@@ -143,7 +139,10 @@ export default function CategoriesAdmin() {
       <h1 className="text-2xl font-bold text-slate-900 mb-6">Administrar Categorías</h1>
 
       {}
-      <form onSubmit={handleCreateSubmit} className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm mb-8">
+      <form
+        onSubmit={handleCreateSubmit}
+        className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm mb-8"
+      >
         <h2 className="text-sm font-semibold text-slate-700 mb-3">Nueva Categoría</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
           <div>
@@ -158,7 +157,9 @@ export default function CategoriesAdmin() {
             />
           </div>
           <div>
-            <label className="block text-xs font-medium text-slate-500 mb-1">Slug (Auto-generado)</label>
+            <label className="block text-xs font-medium text-slate-500 mb-1">
+              Slug (Auto-generado)
+            </label>
             <input
               type="text"
               value={newSlug}
@@ -213,7 +214,9 @@ export default function CategoriesAdmin() {
               ))}
               {categories.length === 0 && (
                 <tr>
-                  <td colSpan="3" className="text-center p-6 text-slate-400">No hay categorías registradas.</td>
+                  <td colSpan="3" className="text-center p-6 text-slate-400">
+                    No hay categorías registradas.
+                  </td>
                 </tr>
               )}
             </tbody>

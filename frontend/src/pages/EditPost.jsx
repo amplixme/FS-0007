@@ -63,9 +63,7 @@ export default function EditPost() {
           ← Volver a inicio
         </Link>
 
-        <p className="mt-6 rounded-lg bg-red-50 p-4 text-red-700">
-          {error}
-        </p>
+        <p className="mt-6 rounded-lg bg-red-50 p-4 text-red-700">{error}</p>
       </section>
     );
   }

@@ -152,12 +152,7 @@ GET /users/15
 Es posible agregar middleware únicamente a determinadas rutas.
 
 ```javascript
-router.post(
-    "/",
-    validate(userSchema),
-    authMiddleware,
-    usersController.createUser
-);
+router.post("/", validate(userSchema), authMiddleware, usersController.createUser);
 ```
 
 También puede aplicarse a todas las rutas del router:
@@ -208,7 +203,7 @@ router.use("/users", usersRoutes);
 router.use("/reservations", reservationsRoutes);
 
 router.get("/health", (req, res) => {
-    res.json({ status: "ok" });
+  res.json({ status: "ok" });
 });
 
 router.use(errorHandler);

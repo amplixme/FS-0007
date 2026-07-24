@@ -5,11 +5,6 @@ import { uploadImageController } from "../controllers/upload.controllers.js";
 
 const router = Router();
 
-router.post(
-  "/",
-  authMiddleware,
-  uploadImageMiddleware.single("image"),
-  uploadImageController
-);
+router.post("/", authMiddleware, uploadImageMiddleware.single("image"), uploadImageController);
 
 export default router;

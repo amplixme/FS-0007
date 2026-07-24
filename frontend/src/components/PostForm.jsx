@@ -15,16 +15,13 @@ export default function PostForm({
   const [published, setPublished] = useState(initialPost?.published ?? true);
   const [validationError, setValidationError] = useState("");
 
-
   const [availableCategories, setAvailableCategories] = useState([]);
   const [selectedCategoryIds, setSelectedCategoryIds] = useState(() => {
-
     if (initialPost?.categories) {
       return initialPost.categories.map((cat) => cat.id || cat);
     }
     return [];
   });
-
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -39,7 +36,6 @@ export default function PostForm({
     fetchCategories();
   }, []);
 
-
   const handleCategoryChange = (categoryId) => {
     setSelectedCategoryIds((prevIds) =>
       prevIds.includes(categoryId)
@@ -47,7 +43,6 @@ export default function PostForm({
         : [...prevIds, categoryId]
     );
   };
-
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -89,8 +84,7 @@ export default function PostForm({
         />
       </article>
 
-
-      { }
+      {}
       <section className="mb-8 p-6 bg-surface-container-low rounded-xl border border-outline-variant/15">
         <h4 className="font-bold text-on-surface mb-2">Categorías</h4>
         <p className="text-sm text-on-surface-variant mb-4">
@@ -106,10 +100,11 @@ export default function PostForm({
               return (
                 <label
                   key={category.id}
-                  className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer select-none transition-all duration-200 ${isChecked
+                  className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer select-none transition-all duration-200 ${
+                    isChecked
                       ? "border-primary bg-primary/5 text-primary"
                       : "border-outline-variant/30 hover:bg-surface-container-high text-on-surface"
-                    }`}
+                  }`}
                 >
                   <input
                     type="checkbox"
@@ -125,21 +120,14 @@ export default function PostForm({
         )}
       </section>
 
-
-
-
       {(validationError || error) && (
-        <p className="text-error text-sm mb-4">
-          {validationError || error}
-        </p>
+        <p className="text-error text-sm mb-4">{validationError || error}</p>
       )}
 
       <section className="mt-20 pt-12 border-t border-outline-variant/15">
         <div className="flex items-center justify-between p-6 bg-surface-container-low rounded-xl">
           <div>
-            <h4 className="font-bold text-on-surface">
-              Visibilidad y programación
-            </h4>
+            <h4 className="font-bold text-on-surface">Visibilidad y programación</h4>
             <p className="text-sm text-on-surface-variant">
               Configura cuándo será visible este artículo para tus lectores.
             </p>

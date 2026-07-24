@@ -55,10 +55,7 @@ export const deleteCategory = async (id) => {
   }
 
   if (category.posts.length > 0) {
-    throw new CustomError(
-      409,
-      "No se puede eliminar una categoría con posts asociados",
-    );
+    throw new CustomError(409, "No se puede eliminar una categoría con posts asociados");
   }
 
   return await prisma.category.delete({

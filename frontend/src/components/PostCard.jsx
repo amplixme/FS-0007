@@ -5,10 +5,7 @@ import { es } from "date-fns/locale";
 export default function PostCard({ post, onClickCat }) {
   const navigate = useNavigate();
 
-  const extracto =
-    post.content?.length > 150
-      ? `${post.content.slice(0, 150)}...`
-      : post.content;
+  const extracto = post.content?.length > 150 ? `${post.content.slice(0, 150)}...` : post.content;
 
   const visibleCategories = post.categories?.slice(0, 3) || [];
   const hiddenCount = (post.categories?.length || 0) - visibleCategories.length;
@@ -103,9 +100,7 @@ export default function PostCard({ post, onClickCat }) {
             <span className="material-symbols-outlined text-sm" aria-hidden="true">
               forum
             </span>
-            <span className="text-xs font-medium">
-              {post._count?.comments || 0}
-            </span>
+            <span className="text-xs font-medium">{post._count?.comments || 0}</span>
             <span className="sr-only">comentarios</span>
           </div>
         </div>

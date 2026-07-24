@@ -1,23 +1,14 @@
 import prisma from "../repository/Prisma/prisma.db.js";
 import CustomError from "../utils/customError.js";
 
-export const create = async (
-  title,
-  content,
-  authorId,
-  published,
-  categoryIds,
-  coverImage,
-) => {
+export const create = async (title, content, authorId, published, categoryIds, coverImage) => {
   const newPost = await prisma.post.create({
     data: {
       title,
       content,
       authorId: Number(authorId),
       published: Boolean(published),
-      categories: categoryIds?.length
-        ? { connect: categoryIds.map((id) => ({ id })) }
-        : undefined,
+      categories: categoryIds?.length ? { connect: categoryIds.map((id) => ({ id })) } : undefined,
       coverImage: coverImage || null,
     },
     include: {
@@ -32,7 +23,14 @@ export const create = async (
   return newPost;
 };
 
-export const getAllPublishedPosts = async ({ category, page = 1, limit = 10, sort = "newest", authorId, search }) => {
+export const getAllPublishedPosts = async ({
+  category,
+  page = 1,
+  limit = 10,
+  sort = "newest",
+  authorId,
+  search,
+}) => {
   const pageNum = parseInt(page) || 1;
   const limitNum = parseInt(limit) || 10;
   const offset = (pageNum - 1) * limitNum;
@@ -83,8 +81,8 @@ export const getAllPublishedPosts = async ({ category, page = 1, limit = 10, sor
       include: {
         _count: {
           select: {
-            comments: true
-          }
+            comments: true,
+          },
         },
         author: {
           select: {
@@ -156,14 +154,7 @@ const validateOwnership = async (id, user) => {
   return postId;
 };
 
-export const updatePost = async (
-  id,
-  title,
-  content,
-  user,
-  published,
-  coverImage,
-) => {
+export const updatePost = async (id, title, content, user, published, coverImage) => {
   const postId = await validateOwnership(id, user);
 
   return await prisma.post.update({

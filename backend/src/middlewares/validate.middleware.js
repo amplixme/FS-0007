@@ -8,9 +8,7 @@ export const validate = (schema) => {
     } catch (error) {
       if (error instanceof ZodError) {
         const validationError = new Error(
-          error.issues
-            .map((issue) => `${issue.path.join(".")}: ${issue.message}`)
-            .join(", "),
+          error.issues.map((issue) => `${issue.path.join(".")}: ${issue.message}`).join(", ")
         );
         validationError.status = 400;
 

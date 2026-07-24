@@ -1,8 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import {
-  getProfile,
-  updateProfile as update,
-} from "../services/user.service.js";
+import { getProfile, updateProfile as update } from "../services/user.service.js";
 
 export const useProfile = (userId) => {
   const [profile, setProfile] = useState(null);

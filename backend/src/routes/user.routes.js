@@ -11,11 +11,6 @@ const router = Router();
 
 router.get("/:id", getPublicProfileController);
 
-router.put(
-  "/me",
-  authMiddleware,
-  validate(updateProfileSchema),
-  updateProfileController,
-);
+router.put("/me", authMiddleware, validate(updateProfileSchema), updateProfileController);
 
 export default router;

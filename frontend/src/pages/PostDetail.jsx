@@ -69,10 +69,7 @@ function PostDetail() {
   if (error) {
     return (
       <section className="mx-auto max-w-3xl">
-        <Link
-          to="/"
-          className="mb-6 inline-block text-blue-600 hover:underline"
-        >
+        <Link to="/" className="mb-6 inline-block text-blue-600 hover:underline">
           ← Volver a inicio
         </Link>
 
@@ -95,17 +92,12 @@ function PostDetail() {
             toast.type === "success" ? "bg-emerald-600" : "bg-red-600"
           }`}
         >
-          <span className="text-base">
-            {toast.type === "success" ? "✅" : "❌"}
-          </span>
+          <span className="text-base">{toast.type === "success" ? "✅" : "❌"}</span>
           <p className="text-sm font-medium">{toast.message}</p>
         </div>
       )}
 
-      <Link
-        to="/"
-        className="mb-6 inline-block text-blue-600 hover:underline"
-      >
+      <Link to="/" className="mb-6 inline-block text-blue-600 hover:underline">
         ← Volver a inicio
       </Link>
 
@@ -113,10 +105,8 @@ function PostDetail() {
         <h1 className="text-3xl font-bold text-slate-900">{post.title}</h1>
 
         <div className="mt-4 flex flex-wrap gap-x-4 gap-y-2 text-sm text-slate-500">
-          <Link
-            to={`/profile/${post.authorId}`}
-          >
-              Por {post.author?.name || "Autor desconocido"}
+          <Link to={`/profile/${post.authorId}`}>
+            Por {post.author?.name || "Autor desconocido"}
           </Link>
           <span>
             {new Date(post.createdAt).toLocaleDateString("es-AR", {
@@ -136,9 +126,7 @@ function PostDetail() {
         />
       )}
 
-      <div className="whitespace-pre-wrap leading-7 text-slate-700">
-        {post.content}
-      </div>
+      <div className="whitespace-pre-wrap leading-7 text-slate-700">{post.content}</div>
 
       {isAuthor && (
         <div className="mt-8 flex gap-3 border-t border-slate-200 pt-6">

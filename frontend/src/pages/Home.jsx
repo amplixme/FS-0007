@@ -80,7 +80,7 @@ export default function Home() {
 
       setSearchParams(nextParams);
     },
-    [searchParams, setSearchParams],
+    [searchParams, setSearchParams]
   );
 
   useEffect(() => {
@@ -156,10 +156,7 @@ export default function Home() {
           </div>
 
           <div>
-            <label
-              htmlFor="post-search"
-              className="mb-2 block text-sm font-medium text-slate-700"
-            >
+            <label htmlFor="post-search" className="mb-2 block text-sm font-medium text-slate-700">
               Buscar publicaciones
             </label>
 
@@ -189,9 +186,7 @@ export default function Home() {
 
         {loading && <Spinner />}
 
-        {!loading && error && (
-          <ErrorMessage message={error} onRetry={loadPosts} />
-        )}
+        {!loading && error && <ErrorMessage message={error} onRetry={loadPosts} />}
 
         {!loading && !error && !posts.length && (
           <EmptyState message="No se encontraron publicaciones." />
@@ -201,11 +196,7 @@ export default function Home() {
           <div className="flex-1">
             <div className="grid gap-8 md:grid-cols-2">
               {posts.map((post) => (
-                <PostCard
-                  key={post.id}
-                  post={post}
-                  onClickCat={handleCategoryChange}
-                />
+                <PostCard key={post.id} post={post} onClickCat={handleCategoryChange} />
               ))}
             </div>
 

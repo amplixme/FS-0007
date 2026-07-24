@@ -10,7 +10,12 @@ import { success } from "../utils/response.js";
 export const createPost = async (req, res, next) => {
   try {
     const { title, content, published, categoryIds } = req.body;
-    console.log("Datos recibidos en createPost:", { title, content, published, categoryIds });
+    console.log("Datos recibidos en createPost:", {
+      title,
+      content,
+      published,
+      categoryIds,
+    });
 
     const authorId = req.user.userId;
 
@@ -25,7 +30,14 @@ export const createPost = async (req, res, next) => {
 export const getPostsController = async (req, res, next) => {
   try {
     const { category, page, limit, sort, authorId, search } = req.query;
-    const posts = await getAllPublishedPosts({ category, page, limit, sort, authorId, search });
+    const posts = await getAllPublishedPosts({
+      category,
+      page,
+      limit,
+      sort,
+      authorId,
+      search,
+    });
     success(res, posts, 200);
   } catch (err) {
     next(err);

@@ -1,13 +1,6 @@
 import api from "./api";
 
-export const getPosts = async ({
-  page = 1,
-  limit = 10,
-  category,
-  sort,
-  search,
-  authorId,
-} = {}) => {
+export const getPosts = async ({ page = 1, limit = 10, category, sort, search, authorId } = {}) => {
   try {
     const response = await api.get("/posts", {
       params: {
@@ -24,8 +17,8 @@ export const getPosts = async ({
   } catch (error) {
     throw new Error(
       error.response?.data?.error?.message ||
-      error.response?.data?.message ||
-      "Error al obtener los posts",
+        error.response?.data?.message ||
+        "Error al obtener los posts"
     );
   }
 };
@@ -37,8 +30,8 @@ export const getPostById = async (id) => {
   } catch (error) {
     throw new Error(
       error.response?.data?.error?.message ||
-      error.response?.data?.message ||
-      "Error al obtener el post",
+        error.response?.data?.message ||
+        "Error al obtener el post"
     );
   }
 };
@@ -51,8 +44,8 @@ export const createPost = async (data) => {
   } catch (error) {
     throw new Error(
       error.response?.data?.error?.message ||
-      error.response?.data?.message ||
-      "Error al crear el post",
+        error.response?.data?.message ||
+        "Error al crear el post"
     );
   }
 };
@@ -64,8 +57,8 @@ export const updatePost = async (id, data) => {
   } catch (error) {
     throw new Error(
       error.response?.data?.error?.message ||
-      error.response?.data?.message ||
-      "Error al actualizar el post",
+        error.response?.data?.message ||
+        "Error al actualizar el post"
     );
   }
 };
@@ -77,8 +70,8 @@ export const deletePost = async (id) => {
   } catch (error) {
     throw new Error(
       error.response?.data?.error?.message ||
-      error.response?.data?.message ||
-      "Error al eliminar el post",
+        error.response?.data?.message ||
+        "Error al eliminar el post"
     );
   }
 };

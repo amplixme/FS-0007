@@ -5,7 +5,7 @@ import passport from "./src/config/passport.jwt.js";
 
 import swaggerUi from "swagger-ui-express";
 import { swaggerSpec } from "./src/config/swagger.js";
-import { corsOptions } from "./src/config/cors.js";
+import corsOptions from "./src/config/cors.js";
 
 const app = express();
 const PORT = process.env.PORT || 3000;

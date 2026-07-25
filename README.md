@@ -73,6 +73,10 @@ Este repositorio contiene una aplicación fullstack en JavaScript con backend y 
 
 - https://fs-0007.onrender.com/
 
+## Url publica de frontend
+
+- https://fs-0007.vercel.app/
+
 ## Documentación de la API
 
 La API cuenta con documentación interactiva construida con Swagger.

@@ -76,3 +76,12 @@ Este repositorio contiene una aplicación fullstack en JavaScript con backend y 
 ## Url publica de frontend
 
 - https://fs-0007.vercel.app/
+
+## Documentación de la API
+
+La API cuenta con documentación interactiva construida con Swagger.
+
+Para ver y probar todos los endpoints(incluyendo autenticación con Token JWT):
+
+1. Inicia el servidor del backend (`npm run dev`).
+2. Abrí tu navegador e ingresá a: `http://localhost:3000/api-docs`

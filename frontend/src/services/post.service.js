@@ -38,7 +38,6 @@ export const getPostById = async (id) => {
 
 export const createPost = async (data) => {
   try {
-    console.log("Datos enviados al backend:", data);
     const response = await api.post("/posts", data);
     return response.data;
   } catch (error) {

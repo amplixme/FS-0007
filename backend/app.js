@@ -19,7 +19,6 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use("/api", router);
 
 app.listen(PORT, () => {
-  console.log(`Server corriendo en puerto ${PORT}`);
 });
 
 export default app;

@@ -38,7 +38,6 @@ export default function FormLogin() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("handleSubmit ejecutado");
     setServerError("");
 
     const validationErrors = validate();

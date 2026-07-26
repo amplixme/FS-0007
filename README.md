@@ -6,11 +6,47 @@ Proyecto para el programa Amplix Acceleration Program.
 
 Este repositorio contiene una aplicación fullstack en JavaScript con backend y frontend separados. El backend usa Node.js, Express y Prisma para conectarse a la base de datos. El frontend usa un framework moderno de JavaScript con Vite usando React para consumir la API.
 
+La aplicación sirve para gestionar contenido en un blog o portal de noticias: permite registrarse, iniciar sesión, crear y editar publicaciones, subir imágenes, comentar, filtrar por categorías y administrar usuarios y contenido desde un panel administrativo.
+
 ## Tech stack
 
 - Backend: Node.js, Express, Prisma, PostgreSQL (u otra base de datos compatible)
 - Frontend: Vite, JavaScript, React
 - Herramientas: npm, Git
+
+## Screenshots
+
+### Editar perfil
+
+![Editar perfil](docs/editar-perfil.png)
+
+### Perfil de usuario
+
+![Perfil](docs/profile.png)
+
+### Detalle de publicación
+
+![Detalle de publicación](docs/detalle.png)
+
+### Panel de administración
+
+![Panel de administración](docs/admin.png)
+
+### Crear publicación
+
+![Crear publicación](docs/crear-post.png)
+
+### Iniciar sesión
+
+![Iniciar sesión](docs/login.png)
+
+### Registrarse
+
+![Registrarse](docs/register.png)
+
+### Listado de publicaciones
+
+![Listado de publicaciones](docs/publicaciones.png)
 
 ## Instrucciones de setup
 
@@ -34,6 +70,9 @@ Este repositorio contiene una aplicación fullstack en JavaScript con backend y 
        - `DATABASE_URL`
        - `JWT_SECRET`
        - `PORT`
+       - `JWT_EXPIRES_IN`
+       - `CLOUDINARY_URL`
+       - `CORS_ORIGIN`
    - Frontend:
      - `cd ../frontend`
      - `cp .env.example .env`

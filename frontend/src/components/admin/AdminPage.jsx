@@ -5,7 +5,7 @@ import PostsCard from "./PostsCard";
 
 const AdminPage = () => {
   return (
-    <main className="pt-24 pb-16 px-8 max-w-7xl mx-auto w-full">
+    <>
       <div className="mb-8">
         <h1 className="text-4xl font-extrabold tracking-tight text-on-surface mb-2">
           Panel de Administración
@@ -20,7 +20,7 @@ const AdminPage = () => {
         <CommentCards />
       </div>
       <PostsCard />
-    </main>
+    </>
   );
 };
 

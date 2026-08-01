@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { formatDistanceToNow } from "date-fns";
 import { es } from "date-fns/locale";
 
@@ -13,18 +13,19 @@ export default function PostCard({ post, onClickCat }) {
   const goToAuthorProfile = () => {
     navigate(`/profile/${post.authorId}`);
   };
+  const colors = ["bg-secondary-container text-on-secondary-container", "bg-tertiary-fixed text-on-tertiary-fixed"];
 
   return (
-    <article className="overflow-hidden rounded-lg border transition hover:shadow-md">
+    <article className="group bg-surface-container-lowest rounded-2xl overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
       {post.coverImage ? (
-        <Link to={`/posts/${post.id}`} aria-label={`Ver publicación: ${post.title}`}>
+        <div to={`/posts/${post.id}`} aria-label={`Ver publicación: ${post.title}`} className="aspect-video overflow-hidden">
           <img
             src={post.coverImage}
             alt={`Portada de la publicación ${post.title}`}
             loading="lazy"
-            className="aspect-video w-full object-cover"
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           />
-        </Link>
+        </div>
       ) : (
         <Link
           to={`/posts/${post.id}`}
@@ -33,13 +34,13 @@ export default function PostCard({ post, onClickCat }) {
         />
       )}
 
-      <div className="p-4">
+      <div className="p-8">
         <div className="mb-3 flex flex-wrap gap-2">
-          {visibleCategories.map((category) => (
+          {visibleCategories.map((category, index) => (
             <button
               key={category.slug}
               type="button"
-              className="rounded-full bg-blue-100 px-2 py-1 text-xs text-blue-700 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              className={`inline-block px-3 py-1 ${colors[index % colors.length]} text-[10px] font-extrabold uppercase tracking-widest rounded-full mb-4`}
               onClick={() => onClickCat(category.slug)}
             >
               {category.name}
@@ -53,19 +54,19 @@ export default function PostCard({ post, onClickCat }) {
           )}
         </div>
 
-        <h2 className="mb-1 text-lg font-semibold">
+        <h2>
           <Link
             to={`/posts/${post.id}`}
-            className="text-slate-900 hover:underline focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            className="text-2xl font-bold text-on-surface mb-3 tight-tracking line-clamp-2 leading-tight group-hover:text-primary transition-colors"
           >
             {post.title}
           </Link>
         </h2>
 
-        <p className="mb-3 text-sm text-gray-700">{extracto}</p>
+        <p className="text-on-surface-variant line-clamp-3 leading-relaxed mb-6 text-sm">{extracto}</p>
 
         <div className="flex items-center justify-between border-t border-surface-container pt-6">
-          <div className="flex items-center gap-3">
+          <NavLink to={`/profile/${post.authorId}`} className="flex items-center gap-3">
             <div className="h-8 w-8 overflow-hidden rounded-full bg-secondary-fixed">
               <img
                 alt={`Avatar de ${post.author?.name || "autor desconocido"}`}
@@ -77,7 +78,6 @@ export default function PostCard({ post, onClickCat }) {
                 }
               />
             </div>
-
             <div>
               <button
                 type="button"
@@ -94,7 +94,8 @@ export default function PostCard({ post, onClickCat }) {
                 })}
               </p>
             </div>
-          </div>
+          </NavLink>
+
 
           <div className="flex items-center gap-1 text-slate-600">
             <span className="material-symbols-outlined text-sm" aria-hidden="true">
@@ -105,6 +106,6 @@ export default function PostCard({ post, onClickCat }) {
           </div>
         </div>
       </div>
-    </article>
+    </article >
   );
 }

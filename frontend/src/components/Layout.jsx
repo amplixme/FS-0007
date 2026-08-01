@@ -6,7 +6,7 @@ function Layout({ children }) {
     <div className="app-layout">
       <Header />
 
-      <main className="pt-28 pb-20 max-w-7xl mx-auto px-6">{children}</main>
+      <main className="main-content">{children}</main>
 
       <Footer />
     </div>

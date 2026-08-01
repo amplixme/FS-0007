@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { NavLink, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import PostCard from "../components/PostCard";
 import CategoryFilter from "../components/CategoryFilter";
 import Pagination from "../components/common/Pagination";
@@ -120,31 +120,31 @@ export default function Home() {
     });
   };
 
+  const handleClearSearch = () => {
+    setSearchInput("");
+    updateSearchParams({
+      search: "",
+      page: "1",
+    });
+  };
+
   return (
-    <>
-      <section className="mb-16">
-        <div className="relative p-6 sm:p-8 md:p-12 rounded-3xl overflow-hidden bg-gradient-to-br from-primary/5 to-primary-container/10 flex flex-col md:flex-row md:justify-between md:items-start gap-8">
-          <div className="relative z-10 w-full md:max-w-2xl">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-on-surface mb-4 sm:mb-6 tight-tracking leading-tight">
-              Últimas publicaciones
-            </h1>
-            <div className="relative flex items-center">
-              <span className="material-symbols-outlined absolute left-4 text-outline">search</span>
-              <input
-                className="w-full pl-12 pr-6 py-3 sm:py-4 bg-surface-container-lowest border-none rounded-2xl shadow-sm focus:ring-2 focus:ring-primary/20 transition-all text-base sm:text-lg placeholder:text-outline/50"
-                placeholder="Buscar artículos..."
-                type="text"
-                value={searchInput}
-                onChange={(event) => setSearchInput(event.target.value)}
-              />
-            </div>
-          </div>
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-end w-full md:w-auto" style={{ marginTop: "auto" }}>
-            <div className="relative w-full sm:w-56">
+    <div className="grid grid-cols-1 gap-6 p-4 md:grid-cols-[260px_1fr] md:p-8">
+      <aside className="rounded-2xl bg-white md:sticky md:top-8 md:self-start md:py-4 md:shadow-sm">
+        <CategoryFilter activeSlug={activeSlug} onChange={handleCategoryChange} />
+      </aside>
+
+      <main>
+        <div className="mb-6 flex flex-col gap-4">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <h1 className="text-2xl font-bold text-slate-900">Publicaciones</h1>
+
+            <label className="flex items-center gap-2 text-sm font-medium text-slate-700">
+              Ordenar por
               <select
                 value={sort}
                 onChange={handleSortChange}
-                className="w-full appearance-none pl-4 pr-10 py-3 sm:py-4 bg-surface-container-lowest border-none rounded-2xl shadow-sm focus:ring-2 focus:ring-primary/20 transition-all text-base sm:text-lg text-on-surface"
+                className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
               >
                 {SORT_OPTIONS.map((option) => (
                   <option key={option.value} value={option.value}>
@@ -152,15 +152,37 @@ export default function Home() {
                   </option>
                 ))}
               </select>
-              <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-outline">
-                expand_more
-              </span>
+            </label>
+          </div>
+
+          <div>
+            <label htmlFor="post-search" className="mb-2 block text-sm font-medium text-slate-700">
+              Buscar publicaciones
+            </label>
+
+            <div className="relative">
+              <input
+                id="post-search"
+                type="search"
+                value={searchInput}
+                onChange={(event) => setSearchInput(event.target.value)}
+                placeholder="Buscar por título o contenido..."
+                className="w-full rounded-lg border border-slate-300 bg-white px-4 py-2 pr-10 text-sm text-slate-700 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+              />
+
+              {searchInput && (
+                <button
+                  type="button"
+                  onClick={handleClearSearch}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-sm font-bold text-slate-500 hover:text-slate-800"
+                  aria-label="Limpiar búsqueda"
+                >
+                  X
+                </button>
+              )}
             </div>
           </div>
         </div>
-      </section>
-      <div className="flex gap-12">
-        <CategoryFilter activeSlug={activeSlug} onChange={handleCategoryChange} />
 
         {loading && <Spinner />}
 
@@ -174,9 +196,7 @@ export default function Home() {
           <div className="flex-1">
             <div className="grid gap-8 md:grid-cols-2">
               {posts.map((post) => (
-                <NavLink key={post.id} to={`/posts/${post.id}`}>
-                  <PostCard key={post.id} post={post} onClickCat={handleCategoryChange} />
-                </NavLink>
+                <PostCard key={post.id} post={post} onClickCat={handleCategoryChange} />
               ))}
             </div>
 
@@ -187,7 +207,7 @@ export default function Home() {
             />
           </div>
         )}
-      </div>
-    </>
+      </main>
+    </div>
   );
 }

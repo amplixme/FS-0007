@@ -48,40 +48,6 @@ export const getPublicProfile = async (userId) => {
   return user;
 };
 
-export const getUserComments = async (userId) => {
-  const id = Number(userId);
-
-  if (isNaN(id)) {
-    throw new CustomError(400, "ID de usuario inválido");
-  }
-
-  const comments = await prisma.comment.findMany({
-    where: {
-      authorId: id,
-    },
-    select: {
-      id: true,
-      content: true,
-      createdAt: true,
-      post: {
-        select: {
-          id: true,
-          title: true,
-        },
-      },
-      authorId: true,
-      author: {
-        select: {
-          id: true,
-          name: true,
-          avatarUrl: true,
-        },
-      },
-    },
-  });
-  return comments;
-};
-
 export const updateProfile = async (userId, name, bio, avatarUrl) => {
   const user = await findUserOrThrow(userId);
 

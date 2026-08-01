@@ -3,7 +3,6 @@ import { useAuth } from "../context/AuthContext";
 import ConfirmModal from "../components/common/ConfirmModal";
 import { formatDistanceToNow } from "date-fns";
 import { es } from "date-fns/locale";
-import { NavLink } from "react-router-dom";
 
 const Comment = ({ comment, deleteComment, updateComment }) => {
   const { user } = useAuth();
@@ -22,21 +21,17 @@ const Comment = ({ comment, deleteComment, updateComment }) => {
   return (
     <div className="group" key={comment.id}>
       <div className="flex gap-4">
-        <NavLink to={`/profile/${comment.authorId}`}>
-          <img
-            alt="User"
-            className="w-10 h-10 rounded-full"
-            src="https://cdn.pixabay.com/photo/2023/02/18/11/00/icon-7797704_640.png"
-          />
-        </NavLink>
+        <img
+          alt="User"
+          className="w-10 h-10 rounded-full"
+          src="https://cdn.pixabay.com/photo/2023/02/18/11/00/icon-7797704_640.png"
+        />
         <div className="flex-1">
           <div className="flex items-center justify-between mb-1">
             <div className="flex items-center gap-2">
-              <NavLink to={`/profile/${comment.authorId}`}>
-                <span className="font-bold text-on-surface">
-                  @{comment.author?.name || "Autor desconocido"}
-                </span>
-              </NavLink>
+              <span className="font-bold text-on-surface">
+                {comment.author?.name || "Autor desconocido"}
+              </span>
               <span className="text-xs text-on-surface-variant">
                 {formatDistanceToNow(new Date(comment.createdAt), {
                   addSuffix: true,

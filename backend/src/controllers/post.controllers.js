@@ -9,10 +9,11 @@ import { success } from "../utils/response.js";
 
 export const createPost = async (req, res, next) => {
   try {
-    const { title, content, published, categoryIds } = req.body;
+    const { title, content, published, categoryIds, coverImage } = req.body;
+
     const authorId = req.user.userId;
 
-    const result = await create(title, content, authorId, published, categoryIds);
+    const result = await create(title, content, authorId, published, categoryIds, coverImage);
 
     success(res, result, 201);
   } catch (err) {

@@ -54,6 +54,7 @@ export const login = async (email, password) => {
       email: user.email,
       name: user.name,
       role: user.role,
+      avatarUrl: user.avatarUrl
     },
   };
 };

@@ -1,7 +1,6 @@
 import { Router } from "express";
 import {
   getPublicProfileController,
-  getUserCommentsController,
   updateProfileController,
 } from "../controllers/user.controllers.js";
 import { authMiddleware } from "../middlewares/auth.middleware.js";
@@ -29,8 +28,6 @@ const router = Router();
  *         $ref: '#/components/responses/NotFound'
  */
 router.get("/:id", getPublicProfileController);
-
-router.get("/:id/comments", getUserCommentsController);
 
 /**
  * @swagger

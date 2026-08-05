@@ -35,12 +35,14 @@ export default function CreatePost() {
   };
 
   return (
-    <PostForm
-      onSubmit={handleCreatePost}
-      isSubmitting={isSubmitting}
-      error={error}
-      submitLabel="Publicar"
-      submittingLabel="Publicando..."
-    />
+    <main className="pt-32 pb-40 px-6 max-w-[800px] mx-auto">
+      <PostForm
+        onSubmit={handleCreatePost}
+        isSubmitting={isSubmitting}
+        error={error}
+        submitLabel="Publicar"
+        submittingLabel="Publicando..."
+      />
+    </main>
   );
 }

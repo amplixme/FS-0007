@@ -25,7 +25,7 @@ const ProfileEditCard = () => {
       reset({
         name: profile.name ?? "",
         bio: profile.bio ?? "",
-        avatarUrl: profile.avatarUrl ?? null,
+        avatarUrl: profile.avatarUrl ?? "",
       });
     }
   }, [profile, reset]);
@@ -34,9 +34,9 @@ const ProfileEditCard = () => {
 
   const onSubmit = async (data) => {
     await updateProfile(data);
-    console.log("Profile updated successfully", data);
     navigate(`/profile/${user.id}`);
     updateUser({ ...user, name: profile.name });
+    console.log(user, profile);
   };
 
   if (isLoading) {
@@ -96,7 +96,7 @@ const ProfileEditCard = () => {
             Guardar cambios
           </button>
 
-          <button type="button" className="px-8 py-3 border rounded-full" onClick={() => navigate(`/profile/${user.id}`)}>
+          <button type="button" className="px-8 py-3 border rounded-full">
             Cancelar
           </button>
         </div>

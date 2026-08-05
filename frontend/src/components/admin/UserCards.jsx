@@ -41,7 +41,8 @@ const UserCards = () => {
 
   const cambiarRol = async () => {
     setIsModalOpenChangeRole(false);
-    await toggleAdminUserRole(userIdToChangeRole);
+    const res = await toggleAdminUserRole(userIdToChangeRole);
+    console.log(res);
     loadUserData();
   };
 
@@ -194,12 +195,14 @@ const UserCards = () => {
       </div>
       {toast.show && (
         <div
-          className={`fixed top-6 right-6 z-50 flex items-center gap-3 rounded-xl px-4 py-3 shadow-lg ring-1 ring-black/5 animate-in fade-in slide-in-from-top-2 duration-300 ${toast.type === "success" ? "bg-emerald-50 text-emerald-800" : "bg-red-50 text-red-800"
-            }`}
+          className={`fixed top-6 right-6 z-50 flex items-center gap-3 rounded-xl px-4 py-3 shadow-lg ring-1 ring-black/5 animate-in fade-in slide-in-from-top-2 duration-300 ${
+            toast.type === "success" ? "bg-emerald-50 text-emerald-800" : "bg-red-50 text-red-800"
+          }`}
         >
           <span
-            className={`flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full text-xs text-white ${toast.type === "success" ? "bg-emerald-600" : "bg-red-600"
-              }`}
+            className={`flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full text-xs text-white ${
+              toast.type === "success" ? "bg-emerald-600" : "bg-red-600"
+            }`}
           >
             {toast.type === "success" ? "✓" : "✕"}
           </span>

@@ -1,0 +1,108 @@
+import Profile from "../components/Profile";
+import { useProfile } from "../hooks/useProfile.js";
+import { useNavigate, useParams } from "react-router-dom";
+import EmptyState from "../components/common/EmptyState.jsx";
+import Spinner from "../components/common/Spinner.jsx";
+import ErrorMessage from "../components/common/ErrorMessage.jsx";
+import { usePosts } from "../hooks/usePosts.js";
+import PostCard from "../components/PostCard.jsx";
+import { useEffect, useState } from "react";
+import { getProfileComments } from "../services/user.service.js";
+import Comment from "../components/Comment.jsx";
+
+const ProfilePublic = () => {
+  const { id } = useParams();
+  const { profile, isLoading, error, loadProfile } = useProfile(id);
+  const { posts, isLoadingPost, errorPost, reloadPost } = usePosts({
+    authorId: id,
+  });
+  const [comments, setComments] = useState([]);
+  const [isPublicProfile, setIsPublicProfile] = useState(true);
+  const [isComments, setIsComments] = useState(false);
+  const navigate = useNavigate();
+
+  const obtenerComment = async (postId) => {
+    const listComments = await getProfileComments(postId);
+    setComments(listComments.data);
+  }
+  useEffect(() => {
+    obtenerComment(id);
+  }, [id]);
+  return (
+    <main className="pt-5 pb-20 px-6 max-w-7xl mx-auto">
+      {/* <!-- Profile Card Header --> */}
+      {isLoading && <Spinner />}
+
+      {!isLoading && error && <ErrorMessage message={error} onRetry={loadProfile} />}
+
+      {!isLoading && !error && profile && (
+        <Profile
+          profile={profile}
+          onClickEdit={() => {
+            navigate("/profile/editar");
+          }}
+        />
+      )}
+      {/* <!-- Tabs Navigation --> */}
+      <section className="max-w-[900px] mx-auto mb-10 border-b border-surface-container-highest flex gap-8">
+        <button
+          onClick={() => { setIsPublicProfile(true); setIsComments(false); }}
+          className={isPublicProfile ? "pb-4 text-blue-700 dark:text-blue-400 font-bold border-b-2 border-blue-700 dark:border-blue-400" : "pb-4 text-slate-600 dark:text-slate-400 font-medium hover:text-blue-600 transition-colors"}>
+          Publicaciones
+        </button>
+        <button
+          onClick={() => { setIsPublicProfile(false); setIsComments(true); }}
+          className={isComments ? "pb-4 text-blue-700 dark:text-blue-400 font-bold border-b-2 border-blue-700 dark:border-blue-400" : "pb-4 text-slate-600 dark:text-slate-400 font-medium hover:text-blue-600 transition-colors"}>
+          Comentarios
+        </button>
+      </section>
+      {/* <!-- Posts Grid --> */}
+      <section className="max-w-[900px] mx-auto grid grid-cols-1 md:grid-cols-1 gap-8">
+        {isLoadingPost && <Spinner />}
+
+        {!isLoadingPost && errorPost && <ErrorMessage message={errorPost} onRetry={reloadPost} />}
+
+        {!isLoadingPost && !errorPost && !posts.length && (
+          <EmptyState message="Todavía no existen publicaciones." />
+        )}
+
+        {!isLoadingPost && !errorPost && posts.length > 0 && (
+          <div className="flex-1">
+            {isPublicProfile && (
+              <div className="grid md:grid-cols-2 gap-8">
+                {posts.map((post) => (
+                  <PostCard
+                    key={post.id}
+                    post={post}
+                    onClickCat={() => {
+                      console.log("categoria");
+                    }}
+                  />
+                ))}
+              </div>
+            )}
+            {isComments && (
+              <div className="grid md:grid-cols-2 gap-8" >
+                {comments.map((comment) => (
+                  <div key={comment.id}
+                    className="flex flex-col gap-2 p-4 rounded-2xl bg-surface-container-lowest shadow-sm hover:shadow-md transition-shadow"
+                  >
+                    <span className="text-sm text-on-surface-variant">
+                      En:{" "}
+                      <span className="text-base font-bold text-on-surface">
+                        {comment.post?.title || "Publicación desconocida"}
+                      </span>
+                    </span>
+                    <Comment comment={comment} />
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+      </section>
+    </main >
+  );
+};
+
+export default ProfilePublic;

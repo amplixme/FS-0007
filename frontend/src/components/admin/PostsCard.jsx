@@ -115,11 +115,16 @@ const PostsCard = () => {
                 <td className="px-6 py-4">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded bg-slate-200 overflow-hidden flex-shrink-0">
-                      <img
-                        className="w-full h-full object-cover"
-                        data-alt="minimalist workspace with a laptop and coffee cup on a clean white desk with natural light"
-                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuDaSv0-_EhZ5sZwLXxvYZkAuvMoqsn4xBKiS9VU-8kvqG4T7VUxvrvDleGoCXpYDcTW0NPri9kZLNAgCHu_sepGfhQvpExJ789tHoHYOVfANzy91Zx6Ln_72Q0Faz9tla9aDtT-y3sqMYCGosqIETixr38cgc5nKHrWb6nb6eZ9nUEpk2geJG1-RDqNv4Q2qBjqX6ZwWsjD7vYCljKe4u_XF-AB4EeAP5th39_uBUyOvyQEILRPPMHvASiuIYTUmP3Ixwrg2c2J4mjV"
-                      />
+                      {p.coverImage ? (
+                        <img
+                          className="w-full h-full object-cover"
+                          data-alt="minimalist workspace with a laptop and coffee cup on a clean white desk with natural light"
+                          src={p.coverImage}
+
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-slate-200" />
+                      )}
                     </div>
                     <span className="font-semibold line-clamp-1">{p.title}</span>
                   </div>
@@ -163,14 +168,12 @@ const PostsCard = () => {
       </div>
       {toast.show && (
         <div
-          className={`fixed top-6 right-6 z-50 flex items-center gap-3 rounded-xl px-4 py-3 shadow-lg ring-1 ring-black/5 animate-in fade-in slide-in-from-top-2 duration-300 ${
-            toast.type === "success" ? "bg-emerald-50 text-emerald-800" : "bg-red-50 text-red-800"
-          }`}
+          className={`fixed top-6 right-6 z-50 flex items-center gap-3 rounded-xl px-4 py-3 shadow-lg ring-1 ring-black/5 animate-in fade-in slide-in-from-top-2 duration-300 ${toast.type === "success" ? "bg-emerald-50 text-emerald-800" : "bg-red-50 text-red-800"
+            }`}
         >
           <span
-            className={`flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full text-xs text-white ${
-              toast.type === "success" ? "bg-emerald-600" : "bg-red-600"
-            }`}
+            className={`flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full text-xs text-white ${toast.type === "success" ? "bg-emerald-600" : "bg-red-600"
+              }`}
           >
             {toast.type === "success" ? "✓" : "✕"}
           </span>
